@@ -413,6 +413,8 @@ const ROLE_SPECIFIC = {
   ae:  { label:"Account Executive / BDM", comps:[
     { id:"R1", name:"Prospecting & New Logo Acquisition", def:"Builds and executes a proactive outbound strategy to expand the client base.", flagged:false },
     { id:"R2", name:"Competitive Intelligence", def:"Maintains an up-to-date understanding of the competitive landscape and actively uses it in deals.", flagged:false },
+    { id:"R9", name:"Account Expansion & Upselling", def:"Identifies and pursues organic growth opportunities within existing accounts, converting them into incremental revenue for the firm.", flagged:false },
+    { id:"R10", name:"CRM & Sales Process Discipline", def:"Maintains accurate, up-to-date CRM records and follows the firm’s structured sales methodology consistently across all deals.", flagged:false },
   ]},
   csm: { label:"Account Manager / Customer Success Manager", comps:[
     { id:"R3", name:"Retention & Renewal Management", def:"Proactively manages customer health to protect and grow recurring revenue.", flagged:false },
@@ -445,7 +447,7 @@ const STEPS = [
 let state = {
   step: -1, // -1 = welcome
   raterType: "",  // self | manager | peer
-  rateeName: "", raterName: "", role: "", team: "", assessmentDate: "",
+  rateeName: "", raterName: "", raterEmail: "", role: "", team: "", assessmentDate: "",
   relationship: "",
   ratings: {},    // { C1: { score: 3, evidence: "..." }, ... }
   openFeedback: { start:"", stop:"", continue:"", comments:"" },
@@ -566,7 +568,7 @@ function renderWelcome() {
 
   const startBtn = el("button",{class:"btn btn-primary",onclick:()=>{
     // Reset to fresh state
-    state = {step:0,raterType:"",rateeName:"",raterName:"",role:"",team:"",assessmentDate:"",relationship:"",ratings:{},openFeedback:{start:"",stop:"",continue:"",comments:""},readiness:"",submitted:false};
+    state = {step:0,raterType:"",rateeName:"",raterName:"",raterEmail:"",role:"",team:"",assessmentDate:"",relationship:"",ratings:{},openFeedback:{start:"",stop:"",continue:"",comments:""},readiness:"",submitted:false};
     hasSavedProgress = false;
     save(); render();
   }}, "▶  Start New Assessment");
@@ -633,6 +635,11 @@ function renderAboutYou() {
         return fg2;
       })(),
       (() => {
+        const fg2b = el("div",{class:"field-group"});
+        fg2b.appendChild(fld("raterEmail","Your Email Address","email",state.raterEmail,v=>{state.raterEmail=v;save();},"e.g. name@canarys.com"));
+        return fg2b;
+      })(),
+      (() => {
         const fg3 = el("div",{class:"field-group"});
         fg3.appendChild(fld("assessmentDate","Assessment Date","date",state.assessmentDate,v=>{state.assessmentDate=v;save();}));
         if (state.raterType==="peer") {
@@ -664,7 +671,7 @@ function fld(id, labelText, type, val, onChange, placeholder, isSelect=false) {
     });
     wrap.appendChild(s);
   } else {
-    const input = el("input",{id, type, value:val||"", oninput:e=>onChange(e.target.value)});
+    const input = el("input",{id, type, value:val||"", oninput:e=>onChange(e.target.value), onchange:e=>onChange(e.target.value)});
     if(placeholder) input.setAttribute("placeholder",placeholder);
     wrap.appendChild(input);
   }
@@ -758,8 +765,48 @@ function renderCompRow(c) {
 }
 
 function renderLeadership() {
-  renderCompetencies(LEADERSHIP, "Leadership Competencies", "L1–L5 · Assessed for Team Leads/Managers and High-Potential nominees");
+  const isIC = (state.raterType === "self" && state.role !== "mgr");
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  const cardBody = el("div",{class:"card-body"});
+
+  if (isIC) {
+    cardBody.appendChild(el("div",{class:"info-box",style:"background:#FEF9ED;border-color:#E09000"},
+      el("div",{class:"ib-title",style:"color:#C27A00"},"Optional for Individual Contributors"),
+      el("p",{},"These competencies are primarily assessed for Team Leads, Managers, and High-Potential nominees. Since you are completing a self-assessment for a non-management role, ratings here are optional. Rate yourself only if you are being considered for a leadership step-up.")
+    ));
+  }
+
+  const sr = el("div",{class:"rating-scale-ref"});
+  ["1 Not Yet Demonstrated","2 Developing","3 Proficient","4 Advanced","5 Role Model"].forEach(s=>{
+    const [n,...rest] = s.split(" ");
+    sr.appendChild(el("div",{class:"scale-item"},el("strong",{},n+" "),rest.join(" ")));
+  });
+  cardBody.appendChild(sr);
+  LEADERSHIP.forEach(c => cardBody.appendChild(renderCompRow(c)));
+
+  root.appendChild(el("div",{class:"card"},
+    el("div",{class:"card-header"},
+      el("h2",{},"Leadership Competencies"),
+      el("p",{},"L1\u20135 \u00b7 Assessed for Team Leads/Managers and High-Potential nominees")
+    ),
+    cardBody
+  ));
+
+  root.appendChild(el("div",{class:"validation-msg",id:"valMsgLeadership"},"Please rate all leadership competencies before continuing."));
+  root.appendChild(navBar(null, () => {
+    if (!isIC) {
+      const allRated = LEADERSHIP.every(c => state.ratings[c.id] && state.ratings[c.id].score);
+      if (!allRated) {
+        document.getElementById("valMsgLeadership").classList.add("show");
+        return false;
+      }
+    }
+    return true;
+  }));
 }
+
 
 function renderRoleSpecific() {
   const root = document.getElementById("app-root");
@@ -895,6 +942,7 @@ function renderReview() {
           ["Role", (ROLE_SPECIFIC[state.role]||{label:state.role}).label],
           ["Rater Type", {self:"Self-Assessment",manager:"Manager",peer:"Peer Colleague"}[state.raterType]||state.raterType],
           ["Rater Name", state.raterName],
+          ["Rater Email", state.raterEmail],
           ["Team / Region", state.team],
           ["Assessment Date", state.assessmentDate],
           state.relationship ? ["Relationship Duration", state.relationship] : null,
@@ -994,6 +1042,7 @@ async function handleSubmit() {
     rater_type:      state.raterType,
     ratee_name:      state.rateeName,
     rater_name:      state.raterName,
+    rater_email:     state.raterEmail,
     role:            (ROLE_SPECIFIC[state.role]||{label:state.role}).label,
     team:            state.team,
     assessment_date: state.assessmentDate,
@@ -1050,7 +1099,7 @@ function renderSuccess(isDemo) {
       el("button",{class:"btn btn-secondary",onclick:()=>window.print()},"🖨  Print Summary"),
       el("button",{class:"btn btn-secondary",onclick:()=>{
         try { localStorage.removeItem("cal_assessment_v2"); } catch(e) {}
-        state = {step:-1,raterType:"",rateeName:"",raterName:"",role:"",team:"",assessmentDate:"",relationship:"",ratings:{},openFeedback:{start:"",stop:"",continue:"",comments:""},readiness:"",submitted:false};
+        state = {step:-1,raterType:"",rateeName:"",raterName:"",raterEmail:"",role:"",team:"",assessmentDate:"",relationship:"",ratings:{},openFeedback:{start:"",stop:"",continue:"",comments:""},readiness:"",submitted:false};
         hasSavedProgress = false;
         save(); render();
       }},"+ Submit Another Assessment")
