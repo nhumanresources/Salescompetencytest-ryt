@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Competency Assessment — Canarys Automations Limited</title>
+<style>
+  /* ── Reset & Base ─────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:    #1A2E4A;
+    --blue:    #2563A8;
+    --blue-dk: #1A4A8A;
+    --lt-blue: #E8F1FB;
+    --amber:   #C27A00;
+    --lt-amb:  #FEF9ED;
+    --amber-bd:#E09000;
+    --green:   #166534;
+    --lt-green:#D1FAE5;
+    --red:     #B91C1C;
+    --lt-red:  #FEE2E2;
+    --white:   #FFFFFF;
+    --off-w:   #F5F7FA;
+    --gray:    #6B7280;
+    --lt-gray: #E5E7EB;
+    --dk-gray: #374151;
+    --border:  #D1D5DB;
+    --font:    'Segoe UI', Calibri, Arial, sans-serif;
+  }
+  html { font-family: var(--font); font-size: 15px; color: var(--dk-gray); background: var(--off-w); }
+  body { min-height: 100vh; }
+
+  /* ── Layout ─────────────────────────────────────────────────── */
+  .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ── Header ─────────────────────────────────────────────────── */
+  .header {
+    background: var(--navy); color: var(--white);
+    padding: 0.75rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .header-brand { display: flex; align-items: center; gap: 0.75rem; }
+  .header-logo {
+    width: 36px; height: 36px; background: var(--blue);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1rem; color: var(--white); letter-spacing: -1px;
+  }
+  .header-title { font-size: 0.9rem; font-weight: 600; line-height: 1.2; }
+  .header-subtitle { font-size: 0.75rem; color: #A8C4E0; }
+  .header-badge {
+    background: var(--blue); color: var(--white);
+    padding: 0.25rem 0.75rem; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px;
+  }
+
+  /* ── Progress Bar ────────────────────────────────────────────── */
+  .progress-wrap { background: var(--white); border-bottom: 1px solid var(--lt-gray); padding: 0.75rem 1.5rem; }
+  .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+  .progress-label { font-size: 0.8rem; font-weight: 600; color: var(--navy); }
+  .progress-count { font-size: 0.78rem; color: var(--gray); }
+  .progress-bar { height: 6px; background: var(--lt-gray); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 99px; transition: width 0.4s ease; }
+  .progress-steps { display: flex; gap: 0; margin-top: 0.5rem; overflow-x: auto; }
+  .progress-step {
+    flex: 1; min-width: 60px; text-align: center; font-size: 0.65rem;
+    color: var(--gray); padding: 0 0.25rem; position: relative;
+    border-top: 3px solid var(--lt-gray); padding-top: 0.3rem;
+    transition: all 0.2s;
+  }
+  .progress-step.done { color: var(--blue); border-top-color: var(--blue); }
+  .progress-step.active { color: var(--navy); border-top-color: var(--amber); font-weight: 700; }
+
+  /* ── Main Content ────────────────────────────────────────────── */
+  .main { flex: 1; max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; width: 100%; }
+
+  /* ── Cards ───────────────────────────────────────────────────── */
+  .card { background: var(--white); border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 1.25rem; overflow: hidden; }
+  .card-header { background: var(--navy); color: var(--white); padding: 1rem 1.25rem; }
+  .card-header h2 { font-size: 1.05rem; font-weight: 700; }
+  .card-header p { font-size: 0.82rem; color: #A8C4E0; margin-top: 0.2rem; }
+  .card-body { padding: 1.25rem; }
+
+  /* ── Welcome Screen ──────────────────────────────────────────── */
+  .welcome-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #243F61 100%);
+    color: var(--white); border-radius: 10px; padding: 2.5rem 2rem;
+    margin-bottom: 1.5rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .welcome-hero::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(37,99,168,0.3);
+  }
+  .welcome-hero h1 { font-size: 1.7rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .welcome-hero .org { font-size: 0.85rem; color: #A8C4E0; margin-bottom: 1rem; letter-spacing: 1px; }
+  .welcome-hero .desc { font-size: 0.92rem; color: #C8D8EA; line-height: 1.6; max-width: 540px; margin: 0 auto; }
+
+  .welcome-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.9rem; margin-bottom: 1.25rem; }
+  .welcome-card {
+    background: var(--white); border-radius: 8px; padding: 1rem;
+    border-top: 3px solid var(--blue); box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    text-align: center;
+  }
+  .welcome-card .wc-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+  .welcome-card h4 { font-size: 0.82rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; }
+  .welcome-card p { font-size: 0.75rem; color: var(--gray); line-height: 1.4; }
+
+  .info-box {
+    border-left: 4px solid var(--amber);
+    background: var(--lt-amb); border-radius: 0 6px 6px 0;
+    padding: 0.85rem 1rem; margin-bottom: 1rem;
+  }
+  .info-box .ib-title { font-size: 0.82rem; font-weight: 700; color: var(--amber); margin-bottom: 0.3rem; }
+  .info-box p { font-size: 0.82rem; color: #5D4A00; line-height: 1.5; }
+  .info-box p + p { margin-top: 0.3rem; }
+
+  /* ── Form Fields ─────────────────────────────────────────────── */
+  .field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .field-group.full { grid-template-columns: 1fr; }
+  .field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .field label { font-size: 0.8rem; font-weight: 600; color: var(--navy); }
+  .field input, .field select, .field textarea {
+    border: 1.5px solid var(--border); border-radius: 6px;
+    padding: 0.55rem 0.75rem; font-size: 0.88rem; font-family: var(--font);
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--white);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+  }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field .hint { font-size: 0.73rem; color: var(--gray); }
+
+  /* ── Rater Type Selector ─────────────────────────────────────── */
+  .rater-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin-bottom: 1rem; }
+  .rater-opt {
+    border: 2px solid var(--border); border-radius: 8px; padding: 1rem;
+    cursor: pointer; text-align: center; transition: all 0.2s;
+    background: var(--white);
+  }
+  .rater-opt:hover { border-color: var(--blue); background: var(--lt-blue); }
+  .rater-opt.selected { border-color: var(--blue); background: var(--lt-blue); box-shadow: 0 0 0 3px rgba(37,99,168,0.15); }
+  .rater-opt .ro-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+  .rater-opt h4 { font-size: 0.85rem; font-weight: 700; color: var(--navy); }
+  .rater-opt p { font-size: 0.72rem; color: var(--gray); margin-top: 0.2rem; line-height: 1.4; }
+
+  /* ── Competency Rows ─────────────────────────────────────────── */
+  .comp-section-title {
+    font-size: 0.8rem; font-weight: 700; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin: 1.25rem 0 0.6rem; padding-bottom: 0.3rem;
+    border-bottom: 2px solid var(--lt-blue);
+  }
+  .comp-row {
+    border: 1.5px solid var(--border); border-radius: 8px;
+    margin-bottom: 0.85rem; overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .comp-row:hover { border-color: #9DB8D4; }
+  .comp-row.flagged { border-color: var(--amber-bd); background: var(--lt-amb); }
+  .comp-row-header {
+    padding: 0.7rem 1rem; display: flex; align-items: flex-start;
+    gap: 0.75rem; background: var(--off-w);
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-row.flagged .comp-row-header { background: #FEF9ED; border-bottom-color: #F5DCA0; }
+  .comp-id {
+    background: var(--navy); color: var(--white);
+    border-radius: 4px; padding: 0.15rem 0.45rem;
+    font-size: 0.72rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .comp-row.flagged .comp-id { background: var(--amber); }
+  .comp-info { flex: 1; }
+  .comp-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+  .comp-row.flagged .comp-name { color: var(--amber); }
+  .comp-def { font-size: 0.76rem; color: var(--gray); margin-top: 0.2rem; line-height: 1.45; }
+  .comp-flag { font-size: 0.7rem; color: var(--amber); font-weight: 700; margin-top: 0.2rem; }
+  .comp-row-body { padding: 0.85rem 1rem; }
+
+  /* ── Rating Stars / Buttons ──────────────────────────────────── */
+  .rating-label { font-size: 0.75rem; font-weight: 600; color: var(--gray); margin-bottom: 0.45rem; }
+  .rating-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .rating-btn {
+    width: 52px; height: 52px; border-radius: 8px;
+    border: 2px solid var(--border); background: var(--white);
+    cursor: pointer; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1px;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .rating-btn:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .rating-btn .rb-num { font-size: 1.1rem; font-weight: 800; color: var(--gray); line-height: 1; }
+  .rating-btn .rb-lbl { font-size: 0.56rem; color: var(--gray); text-align: center; line-height: 1.1; }
+  .rating-btn.sel-1 { border-color: #B91C1C; background: #FEE2E2; }
+  .rating-btn.sel-1 .rb-num, .rating-btn.sel-1 .rb-lbl { color: #B91C1C; }
+  .rating-btn.sel-2 { border-color: #D97706; background: #FEF3C7; }
+  .rating-btn.sel-2 .rb-num, .rating-btn.sel-2 .rb-lbl { color: #D97706; }
+  .rating-btn.sel-3 { border-color: #2563A8; background: #EFF6FF; }
+  .rating-btn.sel-3 .rb-num, .rating-btn.sel-3 .rb-lbl { color: #2563A8; }
+  .rating-btn.sel-4 { border-color: #0891B2; background: #E0F7FA; }
+  .rating-btn.sel-4 .rb-num, .rating-btn.sel-4 .rb-lbl { color: #0891B2; }
+  .rating-btn.sel-5 { border-color: #166534; background: #DCFCE7; }
+  .rating-btn.sel-5 .rb-num, .rating-btn.sel-5 .rb-lbl { color: #166534; }
+
+  .rating-scale-ref {
+    display: flex; gap: 0.35rem; flex-wrap: wrap;
+    margin-bottom: 1rem; font-size: 0.7rem;
+  }
+  .scale-item { background: var(--off-w); border-radius: 4px; padding: 0.2rem 0.45rem; color: var(--gray); }
+  .scale-item strong { color: var(--dk-gray); }
+
+  /* ── Evidence textarea ───────────────────────────────────────── */
+  .evidence-label { font-size: 0.75rem; font-weight: 600; color: var(--gray); margin-bottom: 0.3rem; }
+  .evidence-ta {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 6px;
+    padding: 0.5rem 0.75rem; font-size: 0.82rem; font-family: var(--font);
+    outline: none; resize: vertical; min-height: 60px;
+    transition: border-color 0.2s;
+  }
+  .evidence-ta:focus { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(37,99,168,0.1); }
+  .char-count { font-size: 0.68rem; color: var(--gray); text-align: right; margin-top: 0.2rem; }
+
+  /* ── Role-specific skip ──────────────────────────────────────── */
+  .role-badge {
+    display: inline-block; background: var(--lt-blue); color: var(--blue);
+    font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem;
+    border-radius: 99px; margin-bottom: 0.6rem;
+  }
+  .skip-msg {
+    background: var(--lt-gray); border-radius: 8px; padding: 1rem;
+    text-align: center; color: var(--gray); font-size: 0.85rem;
+  }
+
+  /* ── Open text sections ──────────────────────────────────────── */
+  .open-q { margin-bottom: 1.25rem; }
+  .open-q label {
+    display: block; font-size: 0.88rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.4rem;
+  }
+  .open-q .q-hint { font-size: 0.75rem; color: var(--gray); margin-bottom: 0.45rem; display: block; }
+  .open-q textarea {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 6px;
+    padding: 0.65rem 0.85rem; font-size: 0.88rem; font-family: var(--font);
+    resize: vertical; min-height: 90px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .open-q textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(37,99,168,0.1); }
+
+  /* ── Readiness Selector ──────────────────────────────────────── */
+  .readiness-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .readiness-opt {
+    border: 2px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .readiness-opt:hover { border-color: var(--blue); }
+  .readiness-opt.selected { border-color: var(--blue); background: var(--lt-blue); }
+  .readiness-opt h4 { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
+  .readiness-opt p { font-size: 0.75rem; color: var(--gray); line-height: 1.4; }
+  .readiness-opt.selected h4 { color: var(--blue); }
+
+  /* ── Review screen ───────────────────────────────────────────── */
+  .review-section { margin-bottom: 1.25rem; }
+  .review-section h3 { font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .review-comp-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0; border-bottom: 1px solid var(--lt-gray); font-size: 0.82rem; }
+  .review-comp-row:last-child { border-bottom: none; }
+  .review-comp-id { font-size: 0.72rem; font-weight: 700; background: var(--lt-blue); color: var(--blue); padding: 0.1rem 0.4rem; border-radius: 3px; flex-shrink: 0; }
+  .review-comp-name { flex: 1; color: var(--dk-gray); }
+  .review-rating { font-weight: 800; padding: 0.15rem 0.55rem; border-radius: 99px; font-size: 0.78rem; }
+  .r-1 { background: #FEE2E2; color: #B91C1C; }
+  .r-2 { background: #FEF3C7; color: #D97706; }
+  .r-3 { background: #EFF6FF; color: #2563A8; }
+  .r-4 { background: #E0F7FA; color: #0891B2; }
+  .r-5 { background: #DCFCE7; color: #166534; }
+  .r-na { background: var(--lt-gray); color: var(--gray); }
+
+  /* ── Navigation Buttons ──────────────────────────────────────── */
+  .nav-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--lt-gray);
+  }
+  .btn {
+    padding: 0.65rem 1.5rem; border-radius: 7px; font-size: 0.9rem;
+    font-weight: 600; cursor: pointer; border: none; font-family: var(--font);
+    transition: all 0.15s; display: flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-primary { background: var(--blue); color: var(--white); }
+  .btn-primary:hover { background: var(--blue-dk); transform: translateY(-1px); }
+  .btn-secondary { background: var(--white); color: var(--navy); border: 1.5px solid var(--border); }
+  .btn-secondary:hover { background: var(--off-w); }
+  .btn-success { background: var(--green); color: var(--white); }
+  .btn-success:hover { background: #0F4A27; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+  /* ── Validation ──────────────────────────────────────────────── */
+  .validation-msg {
+    background: var(--lt-red); border: 1.5px solid #FECACA;
+    border-radius: 6px; padding: 0.65rem 1rem; font-size: 0.82rem;
+    color: var(--red); margin-top: 1rem; display: none;
+  }
+  .validation-msg.show { display: block; }
+  .comp-row.error { border-color: var(--red); }
+
+  /* ── Success Screen ──────────────────────────────────────────── */
+  .success-screen { text-align: center; padding: 3rem 1rem; }
+  .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .success-screen h2 { font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-bottom: 0.5rem; }
+  .success-screen p { color: var(--gray); font-size: 0.92rem; line-height: 1.6; max-width: 480px; margin: 0 auto 1.5rem; }
+  .success-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Setup notice (Google Apps Script) ──────────────────────── */
+  .setup-notice {
+    background: var(--lt-blue); border: 1.5px solid var(--blue);
+    border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+    font-size: 0.82rem; color: var(--blue);
+  }
+  .setup-notice strong { display: block; margin-bottom: 0.25rem; font-size: 0.85rem; }
+  .setup-notice code { background: rgba(37,99,168,0.1); padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.8rem; }
+
+  /* ── Footer ──────────────────────────────────────────────────── */
+  .footer {
+    text-align: center; padding: 1rem;
+    font-size: 0.72rem; color: var(--gray);
+    border-top: 1px solid var(--lt-gray);
+    background: var(--white);
+  }
+  .footer a { color: var(--blue); text-decoration: none; }
+
+  /* ── Responsive ──────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .welcome-cards { grid-template-columns: 1fr; }
+    .rater-options { grid-template-columns: 1fr; }
+    .field-group { grid-template-columns: 1fr; }
+    .readiness-opts { grid-template-columns: 1fr; }
+    .rating-btn { width: 44px; height: 44px; }
+    .header { flex-wrap: wrap; gap: 0.5rem; }
+  }
+
+  /* ── Print ───────────────────────────────────────────────────── */
+  @media print {
+    .nav-bar, .header-badge, .progress-wrap { display: none; }
+    .header { position: relative; }
+    .card { box-shadow: none; border: 1px solid var(--border); }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="header-logo">CAL</div>
+      <div>
+        <div class="header-title">Sales Competency Assessment</div>
+        <div class="header-subtitle">Canarys Automations Limited · Designed by RYT Advisory</div>
+      </div>
+    </div>
+    <span class="header-badge">360° PORTAL</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap" style="display:none">
+    <div class="progress-top">
+      <span class="progress-label" id="stepLabel">Step 1 of 8</span>
+      <span class="progress-count" id="stepCount">Section: About You</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-steps" id="progressSteps"></div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div id="app-root"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    Canarys Automations Limited &nbsp;|&nbsp; Designed by <strong>RYT Advisory</strong> &nbsp;|&nbsp; Confidential — For internal HR use only
+  </footer>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// DATA: COMPETENCY FRAMEWORK
+// ══════════════════════════════════════════════════════════════════
+const RATING_LABELS = ["Not Yet\nDemonstrated","Developing","Proficient","Advanced","Role\nModel"];
+
+const CORE = [
+  { id:"C1", name:"Client & Value Focus", def:"Deeply understands client business challenges and consistently positions IT solutions with measurable, outcome-based value.", flagged:false },
+  { id:"C2", name:"Pipeline Ownership & Revenue Accountability", def:"Maintains a rigorous, data-driven pipeline and takes full accountability for forecast accuracy and revenue commitments.", flagged:false },
+  { id:"C3", name:"Product & Technical Fluency", def:"Possesses sufficient knowledge of the firm's IT solutions portfolio to engage in credible technical and commercial conversations.", flagged:false },
+  { id:"C4", name:"Negotiation & Deal Closing", def:"Navigates complex, multi-stakeholder sales cycles with skill, closing deals that are commercially sound for both client and firm.", flagged:false },
+  { id:"C5", name:"Collaboration & Silo-Breaking", def:"Actively works across team and functional boundaries; shares intelligence freely and co-creates wins rather than hoarding opportunities.", flagged:true },
+  { id:"C6", name:"Trust & Integrity", def:"Consistently acts with honesty and transparency — with clients, colleagues, and leadership — even when uncomfortable.", flagged:true },
+  { id:"C7", name:"Communication & Influence", def:"Communicates with clarity and impact across stakeholder levels; adapts style to audience and drives consensus.", flagged:false },
+  { id:"C8", name:"Resilience & Growth Mindset", def:"Maintains composure and persistence through setbacks; actively seeks feedback and continually develops skills.", flagged:false },
+];
+
+const LEADERSHIP = [
+  { id:"L1", name:"People Development & Coaching", def:"Invests in the growth of others; provides structured coaching, feedback, and stretch opportunities.", flagged:false },
+  { id:"L2", name:"Strategic Vision & Business Acumen", def:"Understands the broader market context; translates business strategy into actionable team priorities.", flagged:false },
+  { id:"L3", name:"Change Agility & Org Design Leadership", def:"Embraces and leads through organisational change; models adaptability and brings the team along.", flagged:true },
+  { id:"L4", name:"Cross-Functional Influence", def:"Builds effective working relationships across departments; leads without authority to mobilise resources.", flagged:true },
+  { id:"L5", name:"Performance Culture & Accountability", def:"Sets clear expectations, holds self and others to high standards, and addresses underperformance honestly.", flagged:false },
+];
+
+const ROLE_SPECIFIC = {
+  ae:  { label:"Account Executive / BDM", comps:[
+    { id:"R1", name:"Prospecting & New Logo Acquisition", def:"Builds and executes a proactive outbound strategy to expand the client base.", flagged:false },
+    { id:"R2", name:"Competitive Intelligence", def:"Maintains an up-to-date understanding of the competitive landscape and actively uses it in deals.", flagged:false },
+  ]},
+  csm: { label:"Account Manager / Customer Success Manager", comps:[
+    { id:"R3", name:"Retention & Renewal Management", def:"Proactively manages customer health to protect and grow recurring revenue.", flagged:false },
+    { id:"R4", name:"Upsell & Cross-Sell Execution", def:"Identifies and converts organic growth opportunities within the existing account base.", flagged:false },
+  ]},
+  pre: { label:"Pre-Sales / Solutions Engineer", comps:[
+    { id:"R5", name:"Technical Discovery & Solutioning", def:"Leads technical discovery sessions to architect the right solution for client needs.", flagged:false },
+    { id:"R6", name:"Demo Effectiveness & Proposal Quality", def:"Delivers differentiated, client-centric demos and RFP responses that advance the deal.", flagged:false },
+  ]},
+  mgr: { label:"Sales Team Lead / Manager", comps:[
+    { id:"R7", name:"Team Performance Ownership", def:"Takes collective accountability for the team's revenue outcomes, morale, and development.", flagged:false },
+    { id:"R8", name:"Hiring Acumen", def:"Attracts, assesses, and onboards talent that strengthens team diversity and capability.", flagged:false },
+  ]},
+};
+
+const READINESS = [
+  { id:"ready_now",  label:"Ready Now",          desc:"Can step into a larger role / operating at next level already." },
+  { id:"ready_1_2",  label:"Ready in 1–2 Years", desc:"Strong performer with high potential; needs targeted development." },
+  { id:"stay_excel", label:"Stay & Excel",        desc:"Exceptional individual contributor; thrives in current role." },
+  { id:"needs_dev",  label:"Needs Development",   desc:"Gaps exist; requires a coaching plan before any progression." },
+];
+
+const STEPS = [
+  "About You","Core (C1–C4)","Core (C5–C8)","Leadership","Role-Specific","Open Feedback","Readiness","Review & Submit"
+];
+
+// ══════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════
+let state = {
+  step: -1, // -1 = welcome
+  raterType: "",  // self | manager | peer
+  rateeName: "", raterName: "", role: "", team: "", assessmentDate: "",
+  relationship: "",
+  ratings: {},    // { C1: { score: 3, evidence: "..." }, ... }
+  openFeedback: { start:"", stop:"", continue:"", comments:"" },
+  readiness: "",
+  submitted: false,
+};
+
+// Try restore from localStorage
+let hasSavedProgress = false;
+try {
+  const saved = localStorage.getItem("cal_assessment_v2");
+  if (saved) {
+    const p = JSON.parse(saved);
+    if (p && p.step !== undefined) {
+      // Restore state but always open on welcome screen so user can choose to continue or restart
+      hasSavedProgress = (p.step >= 0 && !p.submitted);
+      state = p;
+      // Always start on welcome; user can click Continue
+      if (!p.submitted) state.step = -1;
+    }
+  }
+} catch(e) {}
+
+function save() {
+  try { localStorage.setItem("cal_assessment_v2", JSON.stringify(state)); } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════════════════
+// RENDER HELPERS
+// ══════════════════════════════════════════════════════════════════
+function el(tag, attrs={}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v;
+    else if (k === "style") e.style.cssText = v;
+    else if (k.startsWith("on")) e[k] = v;
+    else e.setAttribute(k, v);
+  }
+  for (const c of children) {
+    if (c === null || c === undefined) continue;
+    if (typeof c === "string") e.appendChild(document.createTextNode(c));
+    else e.appendChild(c);
+  }
+  return e;
+}
+
+function html(str) { const d = document.createElement("div"); d.innerHTML = str; return d; }
+
+// ══════════════════════════════════════════════════════════════════
+// PROGRESS
+// ══════════════════════════════════════════════════════════════════
+function updateProgress() {
+  const wrap = document.getElementById("progressWrap");
+  const fill = document.getElementById("progressFill");
+  const label = document.getElementById("stepLabel");
+  const count = document.getElementById("stepCount");
+  const stepsEl = document.getElementById("progressSteps");
+
+  if (state.step < 0 || state.submitted) { wrap.style.display="none"; return; }
+  wrap.style.display = "block";
+
+  const pct = Math.round(((state.step) / STEPS.length) * 100);
+  fill.style.width = pct + "%";
+  label.textContent = `Step ${state.step+1} of ${STEPS.length}`;
+  count.textContent = STEPS[state.step] || "";
+
+  stepsEl.innerHTML = "";
+  STEPS.forEach((s,i) => {
+    const cls = i < state.step ? "progress-step done" : i === state.step ? "progress-step active" : "progress-step";
+    const d = document.createElement("div");
+    d.className = cls;
+    d.textContent = s;
+    stepsEl.appendChild(d);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SCREENS
+// ══════════════════════════════════════════════════════════════════
+
+function renderWelcome() {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  root.appendChild(el("div", {class:"welcome-hero"},
+    el("div", {class:"org"}, "CANARYS AUTOMATIONS LIMITED · RYT ADVISORY"),
+    el("h1", {}, "Sales Competency Assessment Portal"),
+    el("p", {class:"desc"}, "A confidential 360° assessment to evaluate sales competencies, identify future leaders, and surface collaboration gaps across the team.")
+  ));
+
+  const cards = el("div", {class:"welcome-cards"});
+  [
+    ["👤","Self Assessment","Rate your own competencies with honest reflection and specific examples."],
+    ["👔","Manager Assessment","Provide structured, evidence-based ratings for each direct report."],
+    ["🤝","Peer Assessment","Offer candid feedback on collaboration, trust, and silo behaviour (de-identified)."],
+  ].forEach(([icon,title,desc]) => {
+    cards.appendChild(el("div", {class:"welcome-card"},
+      el("div",{class:"wc-icon"},icon),
+      el("h4",{},title),
+      el("p",{},desc)
+    ));
+  });
+  root.appendChild(cards);
+
+  root.appendChild(el("div",{class:"info-box"},
+    el("div",{class:"ib-title"},"⚡  6-Day Sprint · Accelerated Mode"),
+    el("p",{},"This assessment is part of a 6-day sprint. Day 1: Brief & align. Day 2: Forms open (48-hr window). Day 5: Calibration. Day 6: Results & IDPs."),
+    el("p",{},"All responses are confidential. Peer ratings are de-identified before being shared with leadership.")
+  ));
+
+  // Google Apps Script setup notice (shown until the URL is configured)
+  if (GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
+    const noticeDiv = el("div",{class:"setup-notice"});
+    noticeDiv.innerHTML = `<strong>⚙&nbsp; HR Setup Required — Connect Google Sheets Backend</strong>
+      <p style="margin-top:0.35rem">Submissions go to a <strong>free Google Apps Script</strong> web app that writes directly into a Google Sheet in your Google Drive. Deploy <code>CAL_AppScript_Backend.gs</code> and paste your Deployment URL into <code>GOOGLE_SCRIPT_URL</code> in this file. Full instructions appear on the success screen after a demo submission.</p>`;
+    root.appendChild(noticeDiv);
+  }
+
+  const startBtn = el("button",{class:"btn btn-primary",onclick:()=>{
+    // Reset to fresh state
+    state = {step:0,raterType:"",rateeName:"",raterName:"",role:"",team:"",assessmentDate:"",relationship:"",ratings:{},openFeedback:{start:"",stop:"",continue:"",comments:""},readiness:"",submitted:false};
+    hasSavedProgress = false;
+    save(); render();
+  }}, "▶  Start New Assessment");
+  const wNavBar = el("div",{class:"nav-bar",style:"justify-content:center"}, startBtn);
+  if (hasSavedProgress) {
+    const contBtn = el("button",{class:"btn btn-secondary",onclick:()=>{
+      // Restore saved step from localStorage
+      try {
+        const saved = localStorage.getItem("cal_assessment_v2");
+        if (saved) { const p = JSON.parse(saved); if (p && p.step !== undefined) { state = p; if(state.step<0) state.step=0; } }
+      } catch(e) { state.step=0; }
+      save(); render();
+    }}, "↩  Continue where I left off");
+    wNavBar.appendChild(contBtn);
+  }
+  root.appendChild(wNavBar);
+}
+
+function renderAboutYou() {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  root.appendChild(el("div",{class:"card"},
+    el("div",{class:"card-header"},
+      el("h2",{},"About You & the Person Being Assessed"),
+      el("p",{},"This helps HR match your ratings to the right individual and rater type.")
+    ),
+    el("div",{class:"card-body"},
+      // Rater type
+      el("div",{class:"field",style:"margin-bottom:1rem"},
+        el("label",{},"I am completing this assessment as:")
+      ),
+      (() => {
+        const opts = el("div",{class:"rater-options"});
+        [
+          {id:"self", icon:"👤", label:"Self", desc:"Rating my own competencies."},
+          {id:"manager", icon:"👔", label:"Manager / Sales Head", desc:"Rating a direct report or team member."},
+          {id:"peer", icon:"🤝", label:"Peer Colleague", desc:"Rating someone I work alongside."},
+        ].forEach(o => {
+          const d = el("div",{class:"rater-opt"+(state.raterType===o.id?" selected":""),onclick:()=>{state.raterType=o.id;save();render();}},
+            el("div",{class:"ro-icon"},o.icon),
+            el("h4",{},o.label),
+            el("p",{},o.desc)
+          );
+          opts.appendChild(d);
+        });
+        return opts;
+      })(),
+
+      el("hr",{style:"border:none;border-top:1px solid var(--lt-gray);margin:1rem 0"}),
+
+      // Fields
+      (() => {
+        const fg1 = el("div",{class:"field-group"});
+        fg1.appendChild(fld("rateeName","Name of person being assessed","text",state.rateeName,v=>{state.rateeName=v;save();},"e.g. Priya Sharma"));
+        fg1.appendChild(fld("role","Role of person being assessed","select",state.role,v=>{state.role=v;save();},null,true));
+        root.querySelector && null; // noop
+        return fg1;
+      })(),
+      (() => {
+        const fg2 = el("div",{class:"field-group"});
+        fg2.appendChild(fld("raterName",state.raterType==="self"?"Your Full Name":"Your Name (Rater)","text",state.raterName,v=>{state.raterName=v;save();},"Full name"));
+        fg2.appendChild(fld("team","Team / Region","text",state.team,v=>{state.team=v;save();},"e.g. South India Cloud Sales"));
+        return fg2;
+      })(),
+      (() => {
+        const fg3 = el("div",{class:"field-group"});
+        fg3.appendChild(fld("assessmentDate","Assessment Date","date",state.assessmentDate,v=>{state.assessmentDate=v;save();}));
+        if (state.raterType==="peer") {
+          fg3.appendChild(fld("relationship","How long have you worked together?","text",state.relationship,v=>{state.relationship=v;save();},"e.g. 2 years"));
+        }
+        return fg3;
+      })(),
+
+      el("div",{class:"validation-msg",id:"valMsg1"},"Please select a rater type and fill in all required fields before continuing.")
+    )
+  ));
+
+  root.appendChild(navBar(null, () => {
+    if (!state.raterType || !state.rateeName || !state.raterName || !state.role) {
+      document.getElementById("valMsg1").classList.add("show");
+      return false;
+    }
+    document.getElementById("valMsg1") && document.getElementById("valMsg1").classList.remove("show");
+    return true;
+  }));
+}
+
+function fld(id, labelText, type, val, onChange, placeholder, isSelect=false) {
+  const wrap = el("div",{class:"field"}, el("label",{for:id}, labelText));
+  if (isSelect && type==="select") {
+    const s = el("select",{id, onchange:e=>onChange(e.target.value)});
+    [["","Select role..."],["ae","Account Executive / BDM"],["csm","Account Manager / CSM"],["pre","Pre-Sales / Solutions Engineer"],["mgr","Sales Team Lead / Manager"]].forEach(([v,l])=>{
+      const o = el("option",{value:v},l); if(v===val)o.setAttribute("selected",""); s.appendChild(o);
+    });
+    wrap.appendChild(s);
+  } else {
+    const input = el("input",{id, type, value:val||"", oninput:e=>onChange(e.target.value)});
+    if(placeholder) input.setAttribute("placeholder",placeholder);
+    wrap.appendChild(input);
+  }
+  return wrap;
+}
+
+function renderCompetencies(comps, cardTitle, cardSub) {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  root.appendChild(el("div",{class:"card"},
+    el("div",{class:"card-header"},el("h2",{},cardTitle),el("p",{},cardSub)),
+    el("div",{class:"card-body"},
+      // Scale reference
+      (() => {
+        const sr = el("div",{class:"rating-scale-ref"});
+        ["1 Not Yet Demonstrated","2 Developing","3 Proficient","4 Advanced","5 Role Model"].forEach(s=>{
+          const [n,...rest] = s.split(" ");
+          sr.appendChild(el("div",{class:"scale-item"},el("strong",{},n+" "),rest.join(" ")));
+        });
+        return sr;
+      })(),
+
+      ...comps.map(c => renderCompRow(c))
+    )
+  ));
+
+  root.appendChild(el("div",{class:"validation-msg",id:"valMsgComp"},"Please rate all competencies before continuing."));
+  root.appendChild(navBar(null, () => {
+    let allRated = comps.every(c => state.ratings[c.id] && state.ratings[c.id].score);
+    if (!allRated) {
+      document.getElementById("valMsgComp").classList.add("show");
+      comps.forEach(c => {
+        const row = document.getElementById("row-"+c.id);
+        if (row) row.classList.toggle("error", !(state.ratings[c.id] && state.ratings[c.id].score));
+      });
+      return false;
+    }
+    return true;
+  }));
+}
+
+function renderCompRow(c) {
+  const r = state.ratings[c.id] || {};
+  const row = el("div", {class:"comp-row"+(c.flagged?" flagged":""), id:"row-"+c.id},
+    el("div",{class:"comp-row-header"},
+      el("span",{class:"comp-id"},c.id),
+      el("div",{class:"comp-info"},
+        el("div",{class:"comp-name"},c.name),
+        el("div",{class:"comp-def"},c.def),
+        c.flagged ? el("div",{class:"comp-flag"},"⚑  Silo Gatekeeper — non-negotiable for High-Potential designation") : null
+      )
+    ),
+    el("div",{class:"comp-row-body"},
+      el("div",{class:"rating-label"},"Rating:"),
+      (() => {
+        const btns = el("div",{class:"rating-btns"});
+        [1,2,3,4,5].forEach(n => {
+          const lbl = RATING_LABELS[n-1];
+          const btn = el("div",{
+            class:"rating-btn"+(r.score===n?" sel-"+n:""),
+            onclick:()=>{
+              if(!state.ratings[c.id]) state.ratings[c.id]={};
+              state.ratings[c.id].score = n;
+              save();
+              // re-render just this row
+              const rowEl = document.getElementById("row-"+c.id);
+              if(rowEl) { const nr = renderCompRow(c); rowEl.replaceWith(nr); }
+            }
+          },
+            el("div",{class:"rb-num"},String(n)),
+            el("div",{class:"rb-lbl"},lbl)
+          );
+          btns.appendChild(btn);
+        });
+        return btns;
+      })(),
+      el("div",{class:"evidence-label"},"Evidence / Specific Example (optional but recommended):"),
+      (() => {
+        const ta = el("textarea",{
+          class:"evidence-ta",
+          placeholder:"Describe a specific behaviour or situation that informed your rating...",
+          oninput:e=>{ if(!state.ratings[c.id]) state.ratings[c.id]={}; state.ratings[c.id].evidence=e.target.value; save(); }
+        });
+        ta.value = r.evidence || "";
+        return ta;
+      })()
+    )
+  );
+  return row;
+}
+
+function renderLeadership() {
+  renderCompetencies(LEADERSHIP, "Leadership Competencies", "L1–L5 · Assessed for Team Leads/Managers and High-Potential nominees");
+}
+
+function renderRoleSpecific() {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  const roleData = ROLE_SPECIFIC[state.role];
+  const card = el("div",{class:"card"},
+    el("div",{class:"card-header"},
+      el("h2",{},"Role-Specific Competencies"),
+      el("p",{},"Competencies specific to the role of the person being assessed")
+    ),
+    el("div",{class:"card-body"})
+  );
+  const body = card.querySelector(".card-body");
+
+  if (!roleData) {
+    body.appendChild(el("div",{class:"skip-msg"},"⚠  No role selected. Please go back and select the role of the person being assessed."));
+  } else {
+    body.appendChild(el("div",{class:"role-badge"}, roleData.label));
+    // Scale ref
+    const sr = el("div",{class:"rating-scale-ref"});
+    ["1 Not Yet Demonstrated","2 Developing","3 Proficient","4 Advanced","5 Role Model"].forEach(s=>{
+      const [n,...rest] = s.split(" ");
+      sr.appendChild(el("div",{class:"scale-item"},el("strong",{},n+" "),rest.join(" ")));
+    });
+    body.appendChild(sr);
+    roleData.comps.forEach(c => body.appendChild(renderCompRow(c)));
+  }
+
+  root.appendChild(card);
+  root.appendChild(el("div",{class:"validation-msg",id:"valMsgRole"},"Please rate all role-specific competencies."));
+  root.appendChild(navBar(null, () => {
+    const comps = roleData ? roleData.comps : [];
+    let allRated = comps.every(c => state.ratings[c.id] && state.ratings[c.id].score);
+    if (!allRated) {
+      document.getElementById("valMsgRole").classList.add("show");
+      return false;
+    }
+    return true;
+  }));
+}
+
+function renderOpenFeedback() {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  const card = el("div",{class:"card"},
+    el("div",{class:"card-header"},
+      el("h2",{},"Open Feedback — START · STOP · CONTINUE"),
+      el("p",{},"Specific, honest feedback is the most valuable part of this assessment")
+    ),
+    el("div",{class:"card-body"},
+      el("div",{class:"info-box"},
+        el("div",{class:"ib-title"},"Guidance"),
+        el("p",{},"Be specific. Refer to observable behaviours and real situations. Avoid generalisations. This feedback will be de-identified if you are a peer rater.")
+      ),
+      openQ("start","🟢  START — What should this person start doing to be more effective?",
+        "Suggest new behaviours, approaches, or actions not currently demonstrated.",
+        state.openFeedback.start, v=>{state.openFeedback.start=v;save();}),
+      openQ("stop","🔴  STOP — What behaviours are limiting this person's impact or team effectiveness?",
+        "Be candid. Consider silo behaviours, trust issues, or habits that hold the team back.",
+        state.openFeedback.stop, v=>{state.openFeedback.stop=v;save();}),
+      openQ("continue","🔵  CONTINUE — What should this person keep doing — it is working well?",
+        "Recognise specific strengths that should be sustained and built upon.",
+        state.openFeedback.continue, v=>{state.openFeedback.continue=v;save();}),
+      openQ("comments","Additional comments for the Sales Head or HR (optional):",
+        "Anything else relevant that is not captured in the ratings or feedback above.",
+        state.openFeedback.comments, v=>{state.openFeedback.comments=v;save();})
+    )
+  );
+  root.appendChild(card);
+  root.appendChild(navBar());
+}
+
+function openQ(key, labelText, hintText, val, onChange) {
+  const wrap = el("div",{class:"open-q"});
+  wrap.appendChild(el("label",{for:"oq-"+key},labelText));
+  wrap.appendChild(el("span",{class:"q-hint"},hintText));
+  const ta = el("textarea",{id:"oq-"+key, oninput:e=>onChange(e.target.value),
+    placeholder:"Write your response here..."});
+  ta.value = val||"";
+  wrap.appendChild(ta);
+  return wrap;
+}
+
+function renderReadiness() {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  const card = el("div",{class:"card"},
+    el("div",{class:"card-header"},
+      el("h2",{},"Overall Readiness Assessment"),
+      el("p",{},"Based on the totality of your assessment, select the readiness level that best describes this individual today")
+    ),
+    el("div",{class:"card-body"},
+      el("div",{class:"readiness-opts"},
+        ...READINESS.map(r => {
+          const opt = el("div",{class:"readiness-opt"+(state.readiness===r.id?" selected":""),
+            onclick:()=>{state.readiness=r.id;save();render();}},
+            el("h4",{},r.label),
+            el("p",{},r.desc)
+          );
+          return opt;
+        })
+      ),
+      el("div",{class:"validation-msg",id:"valMsgReady"},"Please select a readiness level before continuing.")
+    )
+  );
+  root.appendChild(card);
+  root.appendChild(navBar(null, ()=>{
+    if (!state.readiness) { document.getElementById("valMsgReady").classList.add("show"); return false; }
+    return true;
+  }));
+}
+
+function renderReview() {
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+
+  // Summary card
+  const card = el("div",{class:"card"},
+    el("div",{class:"card-header"},
+      el("h2",{},"Review & Submit"),
+      el("p",{},"Please review your responses before submitting. You can go back to edit anything.")
+    ),
+    el("div",{class:"card-body"},
+      // Rater info
+      (() => {
+        const s = el("div",{class:"review-section"});
+        s.appendChild(el("h3",{},"Rater Information"));
+        [
+          ["Person Assessed", state.rateeName],
+          ["Role", (ROLE_SPECIFIC[state.role]||{label:state.role}).label],
+          ["Rater Type", {self:"Self-Assessment",manager:"Manager",peer:"Peer Colleague"}[state.raterType]||state.raterType],
+          ["Rater Name", state.raterName],
+          ["Team / Region", state.team],
+          ["Assessment Date", state.assessmentDate],
+          state.relationship ? ["Relationship Duration", state.relationship] : null,
+        ].filter(Boolean).forEach(([l,v])=>{
+          s.appendChild(el("div",{class:"review-comp-row"},
+            el("span",{class:"review-comp-name"},el("strong",{},l+": "), v||"—")
+          ));
+        });
+        return s;
+      })(),
+
+      // Core competencies
+      reviewCompSection("Core Competencies", CORE),
+      reviewCompSection("Leadership Competencies", LEADERSHIP),
+      state.role && ROLE_SPECIFIC[state.role] ? reviewCompSection("Role-Specific Competencies", ROLE_SPECIFIC[state.role].comps) : null,
+
+      // Open feedback
+      (() => {
+        const s = el("div",{class:"review-section"});
+        s.appendChild(el("h3",{},"Open Feedback"));
+        [
+          ["START",state.openFeedback.start],
+          ["STOP",state.openFeedback.stop],
+          ["CONTINUE",state.openFeedback.continue],
+          state.openFeedback.comments ? ["Additional Comments",state.openFeedback.comments] : null,
+        ].filter(Boolean).forEach(([l,v])=>{
+          if (!v) return;
+          s.appendChild(el("div",{style:"margin-bottom:0.6rem"},
+            el("div",{style:"font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.2rem"},l),
+            el("div",{style:"font-size:0.83rem;color:var(--dk-gray);white-space:pre-wrap;background:var(--off-w);padding:0.5rem 0.75rem;border-radius:5px;"},v)
+          ));
+        });
+        return s;
+      })(),
+
+      // Readiness
+      (() => {
+        const r = READINESS.find(r=>r.id===state.readiness);
+        const s = el("div",{class:"review-section"});
+        s.appendChild(el("h3",{},"Overall Readiness"));
+        s.appendChild(el("div",{class:"review-comp-row"},
+          el("span",{class:"review-comp-name"}, r ? el("strong",{},r.label) : "Not selected"),
+          r ? el("span",{style:"font-size:0.78rem;color:var(--gray)"},r.desc) : null
+        ));
+        return s;
+      })(),
+
+      el("div",{class:"validation-msg",id:"valMsgSubmit"},"Submission failed. Please check your connection and try again.")
+    )
+  );
+  root.appendChild(card);
+
+  // Submit nav
+  const nb = el("div",{class:"nav-bar"},
+    el("button",{class:"btn btn-secondary",onclick:()=>{state.step--;save();render();}},"← Back"),
+    el("button",{class:"btn btn-success",onclick:handleSubmit},"✔  Submit Assessment")
+  );
+  root.appendChild(nb);
+}
+
+function reviewCompSection(title, comps) {
+  const s = el("div",{class:"review-section"});
+  s.appendChild(el("h3",{},title));
+  comps.forEach(c=>{
+    const r = state.ratings[c.id];
+    const score = r && r.score;
+    const row = el("div",{class:"review-comp-row"},
+      el("span",{class:"review-comp-id"},c.id),
+      el("span",{class:"review-comp-name"},c.name),
+      el("span",{class:"review-rating "+(score?"r-"+score:"r-na")}, score?""+score:"—")
+    );
+    s.appendChild(row);
+    if (r && r.evidence) {
+      s.appendChild(el("div",{style:"font-size:0.75rem;color:var(--gray);padding:0.1rem 0 0.4rem 2.4rem;"},
+        "Evidence: ",el("em",{},r.evidence)
+      ));
+    }
+  });
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SUBMIT  —  Google Apps Script backend (free, writes to Google Sheets)
+// Replace the placeholder below with your deployed Apps Script Web App URL.
+// See CAL_AppScript_Backend.gs for the complete backend code.
+// ══════════════════════════════════════════════════════════════════
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsjHMQssDGttacYhdomFSbzTaL298uqKGHCscuAIN0lafs4ewnuIch391MsAAlLjeK/exec";
+
+async function handleSubmit() {
+  const btn = document.querySelector(".btn-success");
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+
+  // Build flat payload object
+  const payload = {
+    submitted_at:    new Date().toISOString(),
+    rater_type:      state.raterType,
+    ratee_name:      state.rateeName,
+    rater_name:      state.raterName,
+    role:            (ROLE_SPECIFIC[state.role]||{label:state.role}).label,
+    team:            state.team,
+    assessment_date: state.assessmentDate,
+    relationship:    state.relationship||"N/A",
+    readiness:       state.readiness,
+    open_start:      state.openFeedback.start,
+    open_stop:       state.openFeedback.stop,
+    open_continue:   state.openFeedback.continue,
+    open_comments:   state.openFeedback.comments,
+  };
+
+  // Flatten all competency ratings + evidence into payload
+  [...CORE,...LEADERSHIP,...(ROLE_SPECIFIC[state.role]||{comps:[]}).comps].forEach(c=>{
+    const r = state.ratings[c.id]||{};
+    payload["rating_"+c.id]   = r.score||"";
+    payload["evidence_"+c.id] = r.evidence||"";
+  });
+
+  // ── Demo mode (no URL configured yet) ──────────────────────────
+  if (GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
+    await new Promise(r=>setTimeout(r,1200));
+    state.submitted = true; save(); renderSuccess(true);
+    return;
+  }
+
+  // ── Live mode — POST to Google Apps Script ──────────────────────
+  // Uses no-cors because Apps Script redirects; we fire-and-forget
+  // and show success immediately (the sheet will have the row).
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method:  "POST",
+      mode:    "no-cors",           // required for Apps Script cross-origin
+      headers: {"Content-Type":"application/x-www-form-urlencoded"},
+      body:    new URLSearchParams({data: JSON.stringify(payload)}).toString()
+    });
+    // no-cors means we can't read the response — treat completion as success
+    state.submitted = true; save(); renderSuccess(false);
+  } catch(e) {
+    btn.disabled = false; btn.textContent = "✔  Submit Assessment";
+    document.getElementById("valMsgSubmit").classList.add("show");
+  }
+}
+
+function renderSuccess(isDemo) {
+  updateProgress();
+  const root = document.getElementById("app-root");
+  root.innerHTML = "";
+  root.appendChild(el("div",{class:"success-screen"},
+    el("div",{class:"success-icon"},"✅"),
+    el("h2",{},"Assessment Submitted!"),
+    el("p",{},`Thank you${state.raterName ? ", "+state.raterName : ""}. Your assessment for ${state.rateeName||"the nominee"} has been recorded in Google Sheets and is ready for calibration.${isDemo?" (Demo mode — deploy the Apps Script backend to go live.)":""}`),
+    el("p",{style:"font-size:0.82rem;color:var(--gray)"},"Peer ratings will be de-identified before being shared with sales leadership. The calibration session is scheduled for Day 5."),
+    el("div",{class:"success-actions"},
+      el("button",{class:"btn btn-secondary",onclick:()=>window.print()},"🖨  Print Summary"),
+      el("button",{class:"btn btn-secondary",onclick:()=>{
+        try { localStorage.removeItem("cal_assessment_v2"); } catch(e) {}
+        state = {step:-1,raterType:"",rateeName:"",raterName:"",role:"",team:"",assessmentDate:"",relationship:"",ratings:{},openFeedback:{start:"",stop:"",continue:"",comments:""},readiness:"",submitted:false};
+        hasSavedProgress = false;
+        save(); render();
+      }},"+ Submit Another Assessment")
+    )
+  ));
+  if (isDemo) {
+    root.querySelector(".success-screen").insertAdjacentHTML("beforeend",
+      `<div class="setup-notice" style="margin-top:1.5rem;text-align:left">
+        <strong>🔧 To go live with Google Workspace (free):</strong>
+        <p style="margin-top:0.4rem"><strong>Step 1.</strong> Open <a href="https://drive.google.com" target="_blank">Google Drive</a> → New → More → <strong>Google Apps Script</strong>.</p>
+        <p style="margin-top:0.3rem"><strong>Step 2.</strong> Paste the full contents of <code>CAL_AppScript_Backend.gs</code> into the editor. Update the <code>SHEET_NAME</code> constant if needed.</p>
+        <p style="margin-top:0.3rem"><strong>Step 3.</strong> Click <em>Deploy → New deployment → Web app</em>. Set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>. Copy the <strong>Deployment URL</strong>.</p>
+        <p style="margin-top:0.3rem"><strong>Step 4.</strong> In this HTML file, replace <code>YOUR_DEPLOYMENT_ID</code> in the <code>GOOGLE_SCRIPT_URL</code> variable with your full deployment URL.</p>
+        <p style="margin-top:0.3rem"><strong>Step 5.</strong> Host this HTML file on <strong>Google Sites</strong> (embed via Insert → Embed → URL) or on any static host.</p>
+        <p style="margin-top:0.4rem;color:#1A4A8A;font-weight:600">All submissions will appear live in your Google Sheet — no third-party services required.</p>
+      </div>`
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════════════
+function navBar(onBack, onNext) {
+  const nb = el("div",{class:"nav-bar"});
+  const backBtn = el("button",{class:"btn btn-secondary",onclick:()=>{
+    if (onBack && onBack()===false) return;
+    state.step = Math.max(0, state.step-1);
+    save(); render();
+  }},"← Back");
+  if (state.step===0) backBtn.onclick = ()=>{state.step=-1;save();render();};
+  nb.appendChild(backBtn);
+  const nextBtn = el("button",{class:"btn btn-primary",onclick:()=>{
+    if (onNext && onNext()===false) return;
+    state.step++;save();render();
+  }},"Next →");
+  nb.appendChild(nextBtn);
+  return nb;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAIN RENDER DISPATCHER
+// ══════════════════════════════════════════════════════════════════
+function render() {
+  updateProgress();
+  if (state.submitted) { renderSuccess(GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")); return; }
+  if (state.step < 0) { renderWelcome(); return; }
+  switch(state.step) {
+    case 0: renderAboutYou(); break;
+    case 1: renderCompetencies(CORE.slice(0,4),"Core Sales Competencies — C1 to C4","Applies to all roles"); break;
+    case 2: renderCompetencies(CORE.slice(4,8),"Core Sales Competencies — C5 to C8","⚑ C5 & C6 are silo gatekeeper competencies"); break;
+    case 3: renderLeadership(); break;
+    case 4: renderRoleSpecific(); break;
+    case 5: renderOpenFeedback(); break;
+    case 6: renderReadiness(); break;
+    case 7: renderReview(); break;
+    default: renderWelcome();
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// Boot
+render();
+</script>
+</body>
+</html>
