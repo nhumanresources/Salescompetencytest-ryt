@@ -428,6 +428,11 @@ const ROLE_SPECIFIC = {
     { id:"R7", name:"Team Performance Ownership", def:"Takes collective accountability for the team's revenue outcomes, morale, and development.", flagged:false },
     { id:"R8", name:"Hiring Acumen", def:"Attracts, assesses, and onboards talent that strengthens team diversity and capability.", flagged:false },
   ]},
+  hos: { label:"Head of Sales", comps:[
+    { id:"R11", name:"Revenue Strategy & Market Ownership", def:"Defines revenue targets, go-to-market strategy, and territory design; owns full commercial accountability for the sales function.", flagged:false },
+    { id:"R12", name:"Executive Stakeholder Management", def:"Builds and leverages C-suite relationships with strategic accounts and internal leadership to drive enterprise-level outcomes.", flagged:false },
+    { id:"R13", name:"Sales Culture & High-Performance Org Building", def:"Creates a culture of accountability, continuous development, and high performance; attracts and retains top sales talent.", flagged:false },
+  ]},
 };
 
 const READINESS = [
@@ -666,7 +671,7 @@ function fld(id, labelText, type, val, onChange, placeholder, isSelect=false) {
   const wrap = el("div",{class:"field"}, el("label",{for:id}, labelText));
   if (isSelect && type==="select") {
     const s = el("select",{id, onchange:e=>onChange(e.target.value)});
-    [["","Select role..."],["ae","Account Executive / BDM"],["csm","Account Manager / CSM"],["pre","Pre-Sales / Solutions Engineer"],["mgr","Sales Team Lead / Manager"]].forEach(([v,l])=>{
+    [["","Select role..."],["ae","Account Executive / BDM"],["csm","Account Manager / CSM"],["pre","Pre-Sales / Solutions Engineer"],["mgr","Sales Team Lead / Manager"],["hos","Head of Sales"]].forEach(([v,l])=>{
       const o = el("option",{value:v},l); if(v===val)o.setAttribute("selected",""); s.appendChild(o);
     });
     wrap.appendChild(s);
@@ -765,7 +770,7 @@ function renderCompRow(c) {
 }
 
 function renderLeadership() {
-  const isIC = (state.raterType === "self" && state.role !== "mgr");
+  const isIC = (state.raterType === "self" && state.role !== "mgr" && state.role !== "hos");
   const root = document.getElementById("app-root");
   root.innerHTML = "";
 
