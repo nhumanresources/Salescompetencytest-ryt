@@ -345,6 +345,50 @@
     .card { box-shadow: none; border: 1px solid var(--border); }
     body { background: white; }
   }
+
+/* ── IDP Dashboard ────────────────────────────────────── */
+#idp-screen{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+.idp-auth-box{max-width:420px;margin:80px auto;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.12);padding:40px;}
+.idp-auth-box h2{margin:0 0 8px;font-size:22px;}
+.idp-auth-box p{margin:0 0 24px;color:#64748b;font-size:14px;}
+.idp-pin-input{width:100%;padding:12px;font-size:16px;border:1.5px solid #e2e8f0;border-radius:8px;box-sizing:border-box;margin-bottom:12px;letter-spacing:4px;text-align:center;}
+.idp-pin-err{color:#dc2626;font-size:13px;display:none;margin-bottom:10px;}
+.idp-dash-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.idp-dash-hdr h2{margin:0;font-size:20px;}
+.idp-stats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.stat-chip{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+.sc-pend{background:#fef3c7;color:#92400e;} .sc-appr{background:#d1fae5;color:#065f46;}
+.sc-revs{background:#fee2e2;color:#991b1b;} .sc-pub{background:#e0e7ff;color:#3730a3;}
+.sc-tot{background:#f0f9ff;color:#0369a1;}
+.idp-filter{margin-bottom:16px;} .idp-filter select{padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;background:#fff;}
+.emp-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:20px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.emp-card-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;gap:8px;}
+.emp-name{font-weight:700;font-size:15px;} .role-chip{background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:20px;font-size:12px;margin-left:6px;}
+.emp-actions{display:flex;gap:8px;align-items:center;}
+.s-badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+.sb-pend{background:#fef3c7;color:#92400e;} .sb-appr{background:#d1fae5;color:#065f46;}
+.sb-revs{background:#fee2e2;color:#991b1b;} .sb-pub{background:#e0e7ff;color:#3730a3;}
+.btn-appr{background:#10b981;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;}
+.btn-appr:hover{background:#059669;}
+.btn-revs{background:#f59e0b;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;}
+.btn-revs:hover{background:#d97706;}
+.gap-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.gap-tbl th{background:#f1f5f9;padding:8px 12px;text-align:left;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0;}
+.gap-tbl td{padding:8px 12px;border-bottom:1px solid #f8fafc;vertical-align:top;}
+.gap-tbl tr:last-child td{border-bottom:none;}
+.sc-cell{text-align:center;font-weight:700;} .gap-cell{color:#dc2626;font-weight:600;}
+.empty-idp{text-align:center;padding:48px;background:#f8fafc;border-radius:12px;color:#64748b;}
+.bulk-bar{text-align:right;margin-top:20px;}
+.btn-back{background:none;border:1px solid #e2e8f0;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;color:#475569;}
+.btn-back:hover{background:#f1f5f9;}
+/* Modal */
+#rev-modal{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;}
+.rev-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);}
+.rev-box{position:relative;background:#fff;border-radius:16px;padding:28px;width:440px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.rev-box h3{margin:0 0 6px;} .rev-box p{margin:0 0 12px;color:#64748b;font-size:13px;}
+.rev-box textarea{width:100%;height:110px;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px;font-size:14px;resize:vertical;box-sizing:border-box;margin-bottom:14px;}
+.rev-actions{display:flex;gap:10px;justify-content:flex-end;}
+#toast-idp{position:fixed;bottom:30px;right:30px;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;z-index:9999;font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,.3);display:none;}
 </style>
 </head>
 <body>
@@ -589,6 +633,13 @@ function renderWelcome() {
     }}, "↩  Continue where I left off");
     wNavBar.appendChild(contBtn);
   }
+  
+  // IDP Reviewer Dashboard button
+  var idpDashBtn = el("button", {
+    onclick: function() { showIDPDashboard(); },
+    style: "background:#6366f1;color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;"
+  }, "📋  IDP Dashboard (Reviewers)");
+  wNavBar.appendChild(idpDashBtn);
   root.appendChild(wNavBar);
 }
 
@@ -1172,6 +1223,216 @@ function render() {
 
 // Boot
 render();
+
+
+// ══ IDP Dashboard ══════════════════════════════════════════════════════════
+var IDP_PIN = 'CAL-IDP-2026';
+var _allIDPs = [];
+var _revName = null;
+
+function showIDPDashboard() {
+  document.getElementById('app-root').style.display = 'none';
+  document.getElementById('idp-screen').style.display = 'block';
+  document.getElementById('idp-auth').style.display = 'block';
+  document.getElementById('idp-content').style.display = 'none';
+  document.getElementById('idp-pin').value = '';
+  document.getElementById('idp-pin-err').style.display = 'none';
+  document.getElementById('idp-pin').focus();
+}
+
+function exitIDPDashboard() {
+  document.getElementById('idp-screen').style.display = 'none';
+  document.getElementById('app-root').style.display = 'block';
+  render();
+}
+
+function idpUnlock() {
+  var pin = document.getElementById('idp-pin').value.trim();
+  if (pin === IDP_PIN) {
+    document.getElementById('idp-auth').style.display = 'none';
+    document.getElementById('idp-content').style.display = 'block';
+    idpLoad();
+  } else {
+    document.getElementById('idp-pin-err').style.display = 'block';
+  }
+}
+
+function idpLoad() {
+  document.getElementById('idp-table').innerHTML = '<p style="text-align:center;padding:32px;color:#64748b">⏳ Loading IDPs…</p>';
+  fetch(GOOGLE_SCRIPT_URL + '?action=getIDPs')
+    .then(r => r.json())
+    .then(data => {
+      _allIDPs = data.idps || [];
+      idpRenderTable(_allIDPs);
+      idpRenderStats(_allIDPs);
+    })
+    .catch(e => {
+      document.getElementById('idp-table').innerHTML = '<div class="empty-idp"><p>⚠️ Could not load IDPs.<br><small>' + e.message + '</small><br><br>Make sure <strong>generateAndEmailIDPs()</strong> has been run in Apps Script first.</p></div>';
+    });
+}
+
+function idpRenderStats(idps) {
+  var c = {pend:0, appr:0, revs:0, pub:0};
+  idps.forEach(r => {
+    var s = (r['Status']||'').trim().toUpperCase();
+    if (s==='PENDING REVIEW') c.pend++;
+    else if (s==='APPROVED') c.appr++;
+    else if (s==='NEEDS REVISION') c.revs++;
+    else if (s==='PUBLISHED') c.pub++;
+  });
+  var emps = [...new Set(idps.map(r => r['Name']))].length;
+  document.getElementById('idp-stats').innerHTML =
+    '<span class="stat-chip sc-tot">👥 ' + emps + ' Employees</span>' +
+    '<span class="stat-chip sc-pend">⏳ ' + c.pend + ' Pending</span>' +
+    '<span class="stat-chip sc-appr">✅ ' + c.appr + ' Approved</span>' +
+    '<span class="stat-chip sc-revs">🔄 ' + c.revs + ' Needs Revision</span>' +
+    '<span class="stat-chip sc-pub">📤 ' + c.pub + ' Published</span>';
+}
+
+function idpFilter() {
+  var f = document.getElementById('idp-filter-sel').value;
+  idpRenderTable(f ? _allIDPs.filter(r => (r['Status']||'').trim() === f) : _allIDPs);
+}
+
+function idpRenderTable(idps) {
+  if (!idps.length) {
+    document.getElementById('idp-table').innerHTML = '<div class="empty-idp">No IDPs found. Run <strong>generateAndEmailIDPs()</strong> in Apps Script to generate IDPs from submitted assessments.</div>';
+    return;
+  }
+  var byEmp = {};
+  idps.forEach(r => {
+    var n = r['Name']||'Unknown';
+    if (!byEmp[n]) byEmp[n] = {role: r['Role']||'', status: r['Status']||'PENDING REVIEW', rows: []};
+    byEmp[n].rows.push(r);
+  });
+  var h = '';
+  Object.keys(byEmp).sort().forEach(name => {
+    var emp = byEmp[name];
+    var s = emp.status.trim().toUpperCase();
+    var sc = s==='APPROVED'?'sb-appr':s==='NEEDS REVISION'?'sb-revs':s==='PUBLISHED'?'sb-pub':'sb-pend';
+    h += '<div class="emp-card">';
+    h += '<div class="emp-card-hdr">';
+    h += '<div><span class="emp-name">' + idpEsc(name) + '</span><span class="role-chip">' + idpEsc(emp.role) + '</span></div>';
+    h += '<div class="emp-actions"><span class="s-badge ' + sc + '">' + idpEsc(emp.status) + '</span>';
+    if (s !== 'PUBLISHED') {
+      h += '<button class="btn-appr" onclick="idpApprove('' + idpEsc(name) + '')">✅ Approve</button>';
+      h += '<button class="btn-revs" onclick="idpOpenModal('' + idpEsc(name) + '')">🔄 Request Revision</button>';
+    }
+    h += '</div></div>';
+    h += '<table class="gap-tbl"><thead><tr><th>Competency</th><th>Avg</th><th>Self</th><th>Gap</th><th>Development Action</th><th>Reviewer Notes</th></tr></thead><tbody>';
+    emp.rows.forEach(r => {
+      var avg = parseFloat(r['Avg Score (1-5)']||r['Avg Score']||0).toFixed(1);
+      var self = parseFloat(r['Self Score']||0).toFixed(1);
+      h += '<tr><td><strong>' + idpEsc(r['Competency Name']||'') + '</strong><br><small style="color:#94a3b8">' + idpEsc(r['Competency ID']||'') + '</small></td>';
+      h += '<td class="sc-cell">' + avg + '</td><td class="sc-cell">' + self + '</td>';
+      h += '<td class="sc-cell gap-cell">' + idpEsc(r['Gaps Identified']||'') + '</td>';
+      h += '<td style="font-size:13px">' + idpEsc(r['Development Action']||'') + '</td>';
+      h += '<td style="font-size:12px;color:#64748b;font-style:italic">' + idpEsc(r['Reviewer Notes']||'—') + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+  document.getElementById('idp-table').innerHTML = h;
+}
+
+function idpEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function idpApprove(name) {
+  var rows = _allIDPs.filter(r => r['Name'] === name);
+  var ps = rows.map(r => fetch(GOOGLE_SCRIPT_URL, {
+    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'data=' + encodeURIComponent(JSON.stringify({action:'updateIDPStatus', name:r['Name'], compId:r['Competency ID'], status:'APPROVED', notes:''}))
+  }).then(r=>r.json()));
+  Promise.all(ps).then(() => {
+    _allIDPs.forEach(r => { if(r['Name']===name) r['Status']='APPROVED'; });
+    idpRenderTable(document.getElementById('idp-filter-sel').value ? _allIDPs.filter(r=>(r['Status']||'').trim()===document.getElementById('idp-filter-sel').value) : _allIDPs);
+    idpRenderStats(_allIDPs);
+    idpToast('✅ ' + name + "'s IDP approved!");
+  }).catch(e => idpToast('❌ Error: ' + e.message));
+}
+
+function idpOpenModal(name) {
+  _revName = name;
+  document.getElementById('rev-modal-name').textContent = 'Employee: ' + name;
+  document.getElementById('rev-notes').value = '';
+  document.getElementById('rev-modal').style.display = 'flex';
+}
+function idpCloseModal() { _revName = null; document.getElementById('rev-modal').style.display = 'none'; }
+
+function idpSubmitRevision() {
+  var notes = document.getElementById('rev-notes').value.trim();
+  var name = _revName;
+  var rows = _allIDPs.filter(r => r['Name'] === name);
+  var ps = rows.map(r => fetch(GOOGLE_SCRIPT_URL, {
+    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'data=' + encodeURIComponent(JSON.stringify({action:'updateIDPStatus', name:r['Name'], compId:r['Competency ID'], status:'NEEDS REVISION', notes:notes}))
+  }).then(r=>r.json()));
+  Promise.all(ps).then(() => {
+    _allIDPs.forEach(r => { if(r['Name']===name) { r['Status']='NEEDS REVISION'; r['Reviewer Notes']=notes; }});
+    idpCloseModal();
+    idpRenderTable(_allIDPs); idpRenderStats(_allIDPs);
+    idpToast('🔄 Revision requested for ' + name);
+  }).catch(e => idpToast('❌ Error: ' + e.message));
+}
+
+function idpPublish() {
+  idpToast('📤 Triggering publishApprovedIDPs() — check Apps Script Execution log.');
+}
+
+function idpToast(msg) {
+  var t = document.getElementById('toast-idp');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3500);
+}
 </script>
+
+<!-- ── IDP Reviewer Dashboard ──────────────────── -->
+<div id="idp-screen">
+  <!-- Auth gate -->
+  <div id="idp-auth" class="idp-auth-box">
+    <h2>🔐 IDP Reviewer Dashboard</h2>
+    <p>Restricted access — Sai Varma (CHRO / RYT Advisory) &amp; Shyam Mantha (Head of Sales)</p>
+    <input type="password" id="idp-pin" class="idp-pin-input" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')idpUnlock()">
+    <div id="idp-pin-err" class="idp-pin-err">Incorrect PIN. Contact krishna@nhrms.com</div>
+    <button class="btn btn-primary" style="width:100%" onclick="idpUnlock()">Access Dashboard →</button>
+  </div>
+  <!-- Dashboard (shown after auth) -->
+  <div id="idp-content" style="display:none">
+    <div class="idp-dash-hdr">
+      <div>
+        <h2>📋 IDP Review Dashboard</h2>
+        <p style="margin:0;color:#64748b;font-size:13px">Review and approve Individual Development Plans before publishing to employees</p>
+      </div>
+      <button class="btn-back" onclick="exitIDPDashboard()">← Back to Home</button>
+    </div>
+    <div id="idp-stats" class="idp-stats"></div>
+    <div class="idp-filter">
+      <select id="idp-filter-sel" onchange="idpFilter()">
+        <option value="">All Statuses</option>
+        <option value="PENDING REVIEW">⏳ Pending Review</option>
+        <option value="APPROVED">✅ Approved</option>
+        <option value="NEEDS REVISION">🔄 Needs Revision</option>
+        <option value="PUBLISHED">📤 Published</option>
+      </select>
+    </div>
+    <div id="idp-table"></div>
+    <div class="bulk-bar">
+      <button class="btn btn-primary" onclick="idpPublish()">📤 Publish All Approved IDPs via Apps Script</button>
+    </div>
+  </div>
+</div>
+<!-- Revision modal -->
+<div id="rev-modal">
+  <div class="rev-overlay" onclick="idpCloseModal()"></div>
+  <div class="rev-box">
+    <h3>🔄 Request Revision</h3>
+    <p id="rev-modal-name"></p>
+    <textarea id="rev-notes" placeholder="Describe what needs to be changed in this IDP..."></textarea>
+    <div class="rev-actions">
+      <button class="btn-back" onclick="idpCloseModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="idpSubmitRevision()">Send for Revision</button>
+    </div>
+  </div>
+</div>
+<div id="toast-idp"></div>
 </body>
 </html>
