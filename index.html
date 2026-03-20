@@ -389,6 +389,110 @@
 .rev-box textarea{width:100%;height:110px;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px;font-size:14px;resize:vertical;box-sizing:border-box;margin-bottom:14px;}
 .rev-actions{display:flex;gap:10px;justify-content:flex-end;}
 #toast-idp{position:fixed;bottom:30px;right:30px;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;z-index:9999;font-size:14px;box-shadow:0 4px 20px rgba(0,0,0,.3);display:none;}
+
+/* ── IDP Full Document Modal ─────────────────────────────────── */
+#idp-full-modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.55);overflow-y:auto;padding:28px 16px;}
+.idp-doc{background:#fff;border-radius:12px;max-width:880px;margin:0 auto;box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden;font-family:'Segoe UI',Calibri,Arial,sans-serif;}
+/* header */
+.idp-doc-top{background:#1A2E4A;color:#fff;padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.idp-doc-top h2{margin:0 0 3px;font-size:19px;font-weight:800;letter-spacing:.2px;}
+.idp-doc-top p{margin:0;color:#A8C4E0;font-size:11px;}
+.idp-top-btns{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+.idp-top-btn{background:none;border:1.5px solid rgba(255,255,255,.35);color:#fff;border-radius:6px;padding:5px 13px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;}
+.idp-top-btn:hover{background:rgba(255,255,255,.15);}
+/* identity block */
+.idp-identity{display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid #e2e8f0;}
+.idp-id-cell{padding:14px 22px;border-right:1px solid #e2e8f0;}
+.idp-id-cell:last-child{border-right:none;}
+.idp-id-name{font-size:18px;font-weight:800;color:#1A2E4A;margin-bottom:4px;}
+.idp-id-sub{font-size:13px;color:#475569;margin-bottom:2px;}
+.idp-id-row{display:flex;gap:20px;margin-top:10px;flex-wrap:wrap;}
+.idp-id-item{font-size:12px;color:#64748b;}
+.idp-id-item strong{color:#1A2E4A;display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+/* sections */
+.idp-section{border-bottom:1px solid #e2e8f0;}
+.idp-section-hdr{background:#f1f5f9;padding:9px 22px;font-size:11px;font-weight:800;color:#1A2E4A;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #e2e8f0;}
+.idp-section-body{padding:14px 22px;}
+/* strengths */
+.idp-strength-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:13px;color:#1e293b;line-height:1.5;}
+.idp-strength-dot{color:#166534;font-size:15px;flex-shrink:0;margin-top:1px;}
+/* feedback 2-col */
+.idp-feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.idp-fb-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:13px 15px;}
+.idp-fb-title{font-size:11px;font-weight:700;color:#1A2E4A;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.idp-fb-quote{font-size:13px;color:#374151;font-style:italic;line-height:1.6;}
+/* competency table */
+.idp-comp-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.idp-comp-tbl th{background:#f1f5f9;padding:8px 12px;text-align:left;font-weight:700;color:#475569;border-bottom:2px solid #e2e8f0;font-size:11px;text-transform:uppercase;letter-spacing:.3px;}
+.idp-comp-tbl td{padding:8px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
+.idp-comp-tbl tr:last-child td{border-bottom:none;}
+.idp-comp-tbl tr.gap-row td{background:#fff8f8;}
+.idp-comp-tbl tr.gap-row td:first-child{font-weight:700;}
+.idp-score-bar{font-family:monospace;color:#1A2E4A;font-size:13px;white-space:nowrap;}
+.idp-status-ok{color:#166534;font-weight:600;font-size:12px;white-space:nowrap;}
+.idp-status-gap{color:#dc2626;font-weight:700;font-size:12px;white-space:nowrap;}
+.cat-core{background:#e0f2fe;color:#0369a1;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:600;}
+.cat-lead{background:#f3e8ff;color:#7c3aed;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:600;}
+.cat-role{background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:600;}
+/* gap analysis */
+.idp-gap-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.idp-gap-tbl th{background:#fff0f0;padding:8px 12px;text-align:left;font-weight:700;color:#991b1b;border-bottom:2px solid #fecaca;font-size:11px;text-transform:uppercase;letter-spacing:.3px;}
+.idp-gap-tbl td{padding:9px 12px;border-bottom:1px solid #fef2f2;vertical-align:top;line-height:1.5;}
+.idp-gap-tbl tr:last-child td{border-bottom:none;}
+.idp-pri{background:#1A2E4A;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:700;}
+.idp-gap-score{color:#dc2626;font-weight:800;font-size:13px;}
+/* 90-day plan */
+.idp-plan-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.idp-plan-tbl th{padding:9px 14px;text-align:left;font-weight:700;border-bottom:2px solid #e2e8f0;font-size:11px;text-transform:uppercase;letter-spacing:.3px;}
+.idp-plan-tbl td{padding:9px 14px;border-bottom:1px solid #f1f5f9;vertical-align:top;}
+.idp-plan-tbl tr:last-child td{border-bottom:none;}
+.phase-1{background:#eff6ff;border-left:4px solid #2563a8;}
+.phase-2{background:#f0fdf4;border-left:4px solid #16a34a;}
+.phase-3{background:#faf5ff;border-left:4px solid #7c3aed;}
+.phase-lbl{font-size:12px;font-weight:800;color:#1e293b;}
+.phase-sub{font-size:11px;color:#64748b;margin-top:2px;}
+.plan-action{display:flex;align-items:flex-start;gap:7px;margin-bottom:6px;font-size:12.5px;color:#1e293b;line-height:1.45;}
+.plan-dot{color:#2563a8;flex-shrink:0;margin-top:2px;}
+/* readiness box */
+.idp-readiness-box{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:8px;padding:14px 18px;margin-bottom:12px;}
+.idp-readiness-box p{margin:0;font-size:13.5px;color:#0c4a6e;line-height:1.6;}
+.idp-readiness-meta{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px;}
+.idp-rm-item strong{display:block;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+.idp-rm-item span{font-size:13px;font-weight:700;color:#1A2E4A;}
+/* signature block */
+.idp-sig-tbl{width:100%;border-collapse:collapse;}
+.idp-sig-tbl td{padding:14px 18px;border:1px solid #e2e8f0;width:33.3%;vertical-align:top;}
+.idp-sig-name{font-weight:800;font-size:14px;color:#1A2E4A;margin-bottom:4px;}
+.idp-sig-title{font-size:12px;color:#64748b;margin-bottom:16px;}
+.idp-sig-line{border-bottom:1px solid #94a3b8;margin-bottom:4px;height:28px;}
+.idp-sig-lbl{font-size:11px;color:#94a3b8;}
+/* footer */
+.idp-footer-note{text-align:center;padding:10px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;background:#f8fafc;}
+/* action bar */
+.idp-action-bar{padding:14px 22px;display:flex;justify-content:space-between;align-items:center;border-top:2px solid #e2e8f0;gap:10px;flex-wrap:wrap;background:#fff;}
+.idp-rev-wrap{flex:1;}
+.idp-rev-wrap label{font-size:12px;font-weight:700;color:#1A2E4A;display:block;margin-bottom:5px;}
+.idp-rev-ta{width:100%;border:1.5px solid #e2e8f0;border-radius:6px;padding:8px 12px;font-size:12px;resize:none;height:60px;box-sizing:border-box;font-family:inherit;}
+.idp-rev-ta:focus{outline:none;border-color:#2563A8;box-shadow:0 0 0 2px rgba(37,99,168,.1);}
+.idp-action-btns{display:flex;gap:8px;flex-shrink:0;align-items:flex-end;}
+.btn-publish{background:#166534;color:#fff;border:none;padding:9px 18px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;}
+.btn-publish:hover{background:#0f4a27;}
+/* dashboard improvements */
+.idp-workflow-bar{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:11px 16px;margin-bottom:14px;font-size:13px;color:#0369a1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.idp-workflow-bar strong{color:#075985;}
+.btn-sync{background:#2563A8;color:#fff;border:none;padding:7px 16px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;margin-left:auto;white-space:nowrap;}
+.btn-sync:hover{background:#1A4A8A;}
+.btn-view-idp{background:#1A2E4A;color:#fff;border:none;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;}
+.btn-view-idp:hover{background:#243F61;}
+.gap-badge{background:#fee2e2;color:#991b1b;padding:1px 7px;border-radius:12px;font-size:11px;font-weight:700;margin-left:4px;}
+@media print{
+  #idp-full-modal>*:not(.idp-doc){display:none!important;}
+  .idp-doc{box-shadow:none;border-radius:0;max-width:100%;margin:0;}
+  .idp-top-btns,.idp-action-bar,.idp-workflow-bar{display:none!important;}
+  .idp-doc-top{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .idp-section-hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .idp-comp-tbl tr.gap-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
 </style>
 </head>
 <body>
@@ -1434,5 +1538,377 @@ function idpToast(msg) {
   </div>
 </div>
 <div id="toast-idp"></div>
+
+<div id="idp-full-modal"></div>
+<script>
+
+function idpCloseFullModal(){document.getElementById('idp-full-modal').style.display='none';}
+function idpRevFromFull(n){idpCloseFullModal();idpOpenModal(n);}
+
+/* Score bar: filled/empty squares */
+function idpBar(avg){
+  var n=Math.round(parseFloat(avg)||0),s='';
+  for(var i=1;i<=5;i++) s+=(i<=n?'&#9632;':'&#9633;');
+  return '<span class="idp-score-bar">'+s+'</span> <strong>'+parseFloat(avg||0).toFixed(1)+'/5</strong>';
+}
+
+/* Category chip from competency ID */
+function idpCat(id){
+  var ch=(id||'').charAt(0).toUpperCase();
+  if(ch==='C') return '<span class="cat-core">Core</span>';
+  if(ch==='L') return '<span class="cat-lead">Leadership</span>';
+  if(ch==='R') return '<span class="cat-role">Role-Specific</span>';
+  return '';
+}
+
+/* ── Full IDP View ──────────────────────────────────────────────── */
+function idpViewFull(name){
+  var rows=_allIDPs.filter(function(r){return r['Name']===name;});
+  if(!rows.length) return;
+  var emp=rows[0];
+  var status=(emp['Status']||'PENDING REVIEW').trim().toUpperCase();
+  var sc=status==='APPROVED'?'sb-appr':status==='NEEDS REVISION'?'sb-revs':status==='PUBLISHED'?'sb-pub':'sb-pend';
+  var sLabel=status==='APPROVED'?'&#10003; Approved':status==='NEEDS REVISION'?'Needs Revision':status==='PUBLISHED'?'Published':'&#9203; Pending Review';
+  var today=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+
+  /* Sort rows for various views */
+  var byScore=rows.slice().sort(function(a,b){
+    return parseFloat(a['Avg Score (1-5)']||0)-parseFloat(b['Avg Score (1-5)']||0);
+  });
+  var gapRows=byScore.filter(function(r){return parseFloat(r['Avg Score (1-5)']||0)<3.0;});
+  var strongRows=rows.filter(function(r){return parseFloat(r['Avg Score (1-5)']||0)>=4.0;});
+  var totalGaps=gapRows.length;
+
+  /* ── SECTION: Header ── */
+  var h='<div class="idp-doc">';
+  h+='<div class="idp-doc-top">';
+  h+='<div>';
+  h+='<div style="font-size:10px;font-weight:700;color:#7FA8CE;letter-spacing:1.2px;margin-bottom:5px">INDIVIDUAL DEVELOPMENT PLAN</div>';
+  h+='<h2>Sales Competency Assessment &nbsp;&middot;&nbsp; Canarys Automations Limited &nbsp;&middot;&nbsp; RYT Advisory</h2>';
+  h+='<p>Confidential &nbsp;&middot;&nbsp; For internal HR use only &nbsp;&middot;&nbsp; Reviewed by Sai Varma &amp; Shyam Mantha</p>';
+  h+='</div>';
+  h+='<div class="idp-top-btns">';
+  h+='<button class="idp-top-btn" onclick="idpCloseFullModal()">&#10005; Close</button>';
+  h+='<button class="idp-top-btn" onclick="window.print()">&#128424; Print / Save PDF</button>';
+  h+='</div></div>';
+
+  /* ── SECTION: Identity ── */
+  h+='<div class="idp-identity">';
+  h+='<div class="idp-id-cell">';
+  h+='<div class="idp-id-name">'+idpEsc(name)+'</div>';
+  h+='<div class="idp-id-sub"><strong>Role:</strong> '+idpEsc(emp['Role']||'&#8212;')+'</div>';
+  h+='<div class="idp-id-sub"><strong>Status:</strong> <span class="s-badge '+sc+'">'+sLabel+'</span></div>';
+  h+='</div>';
+  h+='<div class="idp-id-cell">';
+  h+='<div class="idp-id-row">';
+  h+='<div class="idp-id-item"><strong>Review Date</strong>'+today+'</div>';
+  h+='<div class="idp-id-item"><strong>Total Competencies</strong>'+rows.length+' assessed</div>';
+  h+='<div class="idp-id-item"><strong>Gaps Identified</strong><span style="color:#dc2626;font-weight:700">'+totalGaps+' of '+rows.length+'</span></div>';
+  h+='</div></div></div>';
+
+  /* ── SECTION 1: Demonstrated Strengths ── */
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-hdr">1. Demonstrated Strengths</div>';
+  h+='<div class="idp-section-body">';
+  if(strongRows.length>0){
+    strongRows.forEach(function(r){
+      var avg=parseFloat(r['Avg Score (1-5)']||0).toFixed(1);
+      h+='<div class="idp-strength-item"><span class="idp-strength-dot">&#10003;</span>';
+      h+='<span><strong>'+idpEsc(r['Competency Name']||'')+'</strong> &#8212; scored '+avg+'/5 across raters. '+idpEsc(r['Development Action']&&parseFloat(r['Avg Score (1-5)']||0)>=4?'Consistently demonstrated; continue to role-model this for the team.':'')+'</span></div>';
+    });
+  } else {
+    h+='<div style="color:#64748b;font-size:13px;font-style:italic">No competencies scored 4.0 or above. All areas require development focus.</div>';
+  }
+  h+='</div></div>';
+
+  /* ── SECTION: Manager & Peer Feedback ── */
+  var notes=rows[0]['Reviewer Notes']||'';
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-body">';
+  h+='<div class="idp-feedback-grid">';
+  h+='<div class="idp-fb-box">';
+  h+='<div class="idp-fb-title">Manager Feedback (Shyam Mantha)</div>';
+  h+='<div class="idp-fb-quote">'+(notes?'&#8220;'+idpEsc(notes)+'&#8221;':'<em style="color:#94a3b8">Reviewer notes will appear here once added.</em>')+'</div>';
+  h+='</div>';
+  h+='<div class="idp-fb-box">';
+  h+='<div class="idp-fb-title">Peer Feedback (De-identified)</div>';
+  h+='<div class="idp-fb-quote"><em style="color:#94a3b8">Peer feedback to be added from 360&#176; assessment results.</em></div>';
+  h+='</div></div></div></div>';
+
+  /* ── SECTION 2: Full Competency Score Summary ── */
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-hdr">2. Full Competency Score Summary</div>';
+  h+='<div style="padding:10px 22px 4px;font-size:12px;color:#64748b">Scores averaged across all raters. Scores below 3.0 flagged as development areas. Self scores shown for calibration.</div>';
+  h+='<div style="overflow-x:auto"><table class="idp-comp-tbl"><thead><tr>';
+  h+='<th>Competency</th><th>Category</th><th>Avg Score</th><th style="text-align:center">Self Score</th><th>Status</th>';
+  h+='</tr></thead><tbody>';
+  rows.forEach(function(r){
+    var avg=parseFloat(r['Avg Score (1-5)']||0);
+    var self=r['Self Score']?parseFloat(r['Self Score']):null;
+    var isGap=avg<3.0;
+    h+='<tr'+(isGap?' class="gap-row"':'')+'>';
+    h+='<td><strong>'+idpEsc(r['Competency ID']||'')+'</strong> &#8212; '+idpEsc(r['Competency Name']||'')+'</td>';
+    h+='<td>'+idpCat(r['Competency ID'])+'</td>';
+    h+='<td>'+idpBar(avg)+'</td>';
+    h+='<td style="text-align:center;color:#64748b;font-weight:600">'+(self!==null?self.toFixed(1):'&#8212;')+'</td>';
+    h+='<td>'+(isGap?'<span class="idp-status-gap">&#9888; Development Area</span>':'<span class="idp-status-ok">&#10003; On Track</span>')+'</td>';
+    h+='</tr>';
+  });
+  h+='</tbody></table></div></div>';
+
+  /* ── SECTION 3: Gap Analysis & Development Plan ── */
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-hdr">3. Competency Gap Analysis &amp; Development Plan</div>';
+  if(totalGaps>0){
+    h+='<div style="padding:10px 22px 4px;font-size:12px;color:#64748b">'+totalGaps+' competencies rated below 3.0 threshold. Priorities ranked from lowest to highest score.</div>';
+    h+='<div style="overflow-x:auto"><table class="idp-gap-tbl"><thead><tr>';
+    h+='<th>Priority</th><th>Competency Gap</th><th>Avg Score</th><th>Development Action</th>';
+    h+='</tr></thead><tbody>';
+    gapRows.forEach(function(r,i){
+      var avg=parseFloat(r['Avg Score (1-5)']||0);
+      h+='<tr>';
+      h+='<td><span class="idp-pri">#'+(i+1)+'</span></td>';
+      h+='<td><strong>'+idpEsc(r['Competency ID']||'')+'</strong> &#8212; '+idpEsc(r['Competency Name']||'')+'</td>';
+      h+='<td><span class="idp-gap-score">'+avg.toFixed(1)+'/5</span></td>';
+      h+='<td>'+idpEsc(r['Development Action']||'&#8212;')+'</td>';
+      h+='</tr>';
+    });
+    h+='</tbody></table></div>';
+  } else {
+    h+='<div class="idp-section-body" style="color:#166534;font-size:13px">&#10003; No competency gaps identified. All competencies are on track (3.0+).</div>';
+  }
+  h+='</div>';
+
+  /* ── SECTION 4: 90-Day Action Plan ── */
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-hdr">4. 90-Day Action Plan</div>';
+  h+='<div style="padding:10px 22px 4px;font-size:12px;color:#64748b">Translates development priorities into time-bound actions, tracked in weekly 1:1s with the manager.</div>';
+  var p1=gapRows.slice(0,Math.min(3,gapRows.length));
+  var p2=gapRows.slice(3,Math.min(6,gapRows.length));
+  var p3=gapRows.slice(6);
+  function planActions(items,fallback){
+    if(!items.length) return '<div class="plan-action"><span class="plan-dot">&#8226;</span>'+fallback+'</div>';
+    return items.map(function(r){
+      return '<div class="plan-action"><span class="plan-dot">&#8226;</span><span><strong>'+idpEsc(r['Competency Name']||'')+':</strong> '+idpEsc(r['Development Action']||'To be defined with manager.')+'</span></div>';
+    }).join('');
+  }
+  h+='<div style="overflow-x:auto"><table class="idp-plan-tbl"><thead><tr>';
+  h+='<th style="width:18%">Phase</th><th style="width:20%">Focus</th><th>Key Actions</th></tr></thead><tbody>';
+  h+='<tr><td class="phase-1"><div class="phase-lbl">Days 1&#8211;30</div><div class="phase-sub">Baseline &amp; Habits</div></td>';
+  h+='<td style="font-size:12px;color:#1e293b">Establish routines and address highest-priority gaps</td>';
+  h+='<td>'+planActions(p1,'Align with manager on 2 priority development goals for the quarter.')+'<div class="plan-action"><span class="plan-dot">&#8226;</span>Manager check-in: agree on development priorities and tracking cadence for the quarter.</div></td></tr>';
+  h+='<tr><td class="phase-2"><div class="phase-lbl">Days 31&#8211;60</div><div class="phase-sub">Skills Building</div></td>';
+  h+='<td style="font-size:12px;color:#1e293b">Deepen competency development through active practice</td>';
+  h+='<td>'+planActions(p2,'Continue existing development actions. Seek feedback from manager and peers.')+'</td></tr>';
+  h+='<tr><td class="phase-3"><div class="phase-lbl">Days 61&#8211;90</div><div class="phase-sub">Demonstration &amp; Review</div></td>';
+  h+='<td style="font-size:12px;color:#1e293b">Demonstrate growth and prepare for 90-day IDP review</td>';
+  h+='<td>'+planActions(p3,'Consolidate progress across all development areas.')+'<div class="plan-action"><span class="plan-dot">&#8226;</span>Conduct 90-day IDP retrospective with Shyam Mantha and Sai Varma.</div></td></tr>';
+  h+='</tbody></table></div></div>';
+
+  /* ── SECTION 5: Leadership Readiness ── */
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-hdr">5. Leadership Readiness &amp; Career Pathway</div>';
+  h+='<div class="idp-section-body">';
+  var avgOverall=rows.reduce(function(s,r){return s+parseFloat(r['Avg Score (1-5)']||0);},0)/rows.length;
+  var readinessText='';
+  var timelineText='';
+  if(avgOverall>=4.0){readinessText='Ready now for an expanded leadership role.';timelineText='Ready Now';}
+  else if(avgOverall>=3.5){readinessText='Strong performer with high potential. Ready for promotion with targeted coaching.';timelineText='6&#8211;12 months';}
+  else if(avgOverall>=3.0){readinessText='Good foundational performance. Requires focused development before progression.';timelineText='12&#8211;18 months';}
+  else{readinessText='Significant development needed across multiple competencies before advancement.';timelineText='18&#8211;24 months';}
+  h+='<div class="idp-readiness-box"><p><strong>Leadership Readiness Assessment</strong><br><br>';
+  h+=idpEsc(name)+' has an overall average score of <strong>'+avgOverall.toFixed(1)+'/5</strong> across '+rows.length+' competencies. ';
+  h+=readinessText+'</p>';
+  h+='<div class="idp-readiness-meta">';
+  h+='<div class="idp-rm-item"><strong>Overall Avg Score</strong><span>'+avgOverall.toFixed(1)+'/5</span></div>';
+  h+='<div class="idp-rm-item"><strong>Gaps to Address</strong><span>'+totalGaps+'</span></div>';
+  h+='<div class="idp-rm-item"><strong>Estimated Timeline</strong><span>'+timelineText+'</span></div>';
+  h+='</div></div>';
+  h+='</div></div>';
+
+  /* ── SECTION 6: Review & Approval ── */
+  h+='<div class="idp-section">';
+  h+='<div class="idp-section-hdr">6. Review &amp; Approval</div>';
+  h+='<div class="idp-section-body" style="padding-top:10px">';
+  h+='<table class="idp-sig-tbl"><tr>';
+  [['Individual',idpEsc(name)],['CHRO / RYT Advisory','Sai Varma'],['Head of Sales','Shyam Mantha']].forEach(function(pair){
+    h+='<td><div class="idp-sig-name">'+pair[1]+'</div>';
+    h+='<div class="idp-sig-title">'+pair[0]+'</div>';
+    h+='<div class="idp-sig-line"></div><div class="idp-sig-lbl">Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div></td>';
+  });
+  h+='</tr></table></div></div>';
+
+  /* ── Footer ── */
+  h+='<div class="idp-footer-note">This IDP is confidential and for internal use only. It will be reviewed at the 90-day mark and again at the end of the sprint cycle.</div>';
+
+  /* ── Reviewer action bar ── */
+  h+='<div class="idp-action-bar">';
+  h+='<div class="idp-rev-wrap"><label>&#128221; Reviewer Notes (Sai / Shyam)</label>';
+  h+='<textarea class="idp-rev-ta" id="idp-rev-notes-input" placeholder="Add coaching guidance, context, or specific instructions for this employee&#39;s development plan&#8230;">'+idpEsc(rows[0]['Reviewer Notes']||'')+'</textarea></div>';
+  if(status!=='PUBLISHED'){
+    h+='<div class="idp-action-btns">';
+    h+='<button class="btn-revs" data-name="'+idpEsc(name)+'" onclick="idpRevFromFull(this.dataset.name)">&#8635; Request Revision</button>';
+    h+='<button class="btn-publish" data-name="'+idpEsc(name)+'" onclick="idpApprovePublish(this.dataset.name)">&#10003; Approve &amp; Publish IDP</button>';
+    h+='</div>';
+  } else {
+    h+='<div class="idp-action-btns"><span style="color:#166534;font-weight:600">&#10003; Published to employee</span></div>';
+  }
+  h+='</div></div>';
+
+  var m=document.getElementById('idp-full-modal');
+  m.innerHTML=h;
+  m.style.display='block';
+  m.onclick=function(e){if(e.target===m)idpCloseFullModal();};
+}
+
+/* ── Approve + Publish ─────────────────────────────────────────── */
+function idpApprovePublish(name){
+  var notes='';
+  var ta=document.getElementById('idp-rev-notes-input');
+  if(ta) notes=ta.value.trim();
+  var rows=_allIDPs.filter(function(r){return r['Name']===name;});
+  var ps=rows.map(function(r){
+    return fetch(GOOGLE_SCRIPT_URL,{
+      method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'data='+encodeURIComponent(JSON.stringify({action:'updateIDPStatus',name:r['Name'],compId:r['Competency ID'],status:'PUBLISHED',notes:notes}))
+    }).then(function(res){return res.json();});
+  });
+  Promise.all(ps).then(function(){
+    _allIDPs.forEach(function(r){if(r['Name']===name){r['Status']='PUBLISHED';if(notes)r['Reviewer Notes']=notes;}});
+    idpCloseFullModal();
+    var f=document.getElementById('idp-filter-sel').value;
+    idpRenderTable(f?_allIDPs.filter(function(r){return(r['Status']||'').trim()===f;}):_allIDPs);
+    idpRenderStats(_allIDPs);
+    idpToast(name+"'s IDP approved and published!");
+  }).catch(function(e){idpToast('Error: '+e.message);});
+}
+
+/* ── Quick approve (from card) ─────────────────────────────────── */
+function idpQuickApprove(name){
+  var rows=_allIDPs.filter(function(r){return r['Name']===name;});
+  var ps=rows.map(function(r){
+    return fetch(GOOGLE_SCRIPT_URL,{
+      method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'data='+encodeURIComponent(JSON.stringify({action:'updateIDPStatus',name:r['Name'],compId:r['Competency ID'],status:'APPROVED',notes:''}))
+    }).then(function(res){return res.json();});
+  });
+  Promise.all(ps).then(function(){
+    _allIDPs.forEach(function(r){if(r['Name']===name)r['Status']='APPROVED';});
+    var f=document.getElementById('idp-filter-sel').value;
+    idpRenderTable(f?_allIDPs.filter(function(r){return(r['Status']||'').trim()===f;}):_allIDPs);
+    idpRenderStats(_allIDPs);
+    idpToast(name+"'s IDP approved!");
+  }).catch(function(e){idpToast('Error: '+e.message);});
+}
+
+/* ── Override idpRenderTable ───────────────────────────────────── */
+idpRenderTable=function(idps){
+  if(!idps.length){
+    document.getElementById('idp-table').innerHTML=
+      '<div class="empty-idp" style="padding:48px 24px">'
+      +'<div style="font-size:2.5rem;margin-bottom:12px">&#128203;</div>'
+      +'<p style="font-weight:700;font-size:15px;color:#1e293b;margin-bottom:8px">No IDPs found for review</p>'
+      +'<p style="margin-bottom:20px;line-height:1.6">IDPs are created automatically when employees submit their assessments. Click <strong>Sync</strong> to pull in any new submissions.</p>'
+      +'<button class="btn-sync" style="margin:0 auto;display:inline-block;font-size:14px;padding:10px 28px" onclick="idpSyncNew()">&#128260; Sync from Latest Submissions</button>'
+      +'</div>';
+    return;
+  }
+  var byEmp={};
+  idps.forEach(function(r){
+    var n=r['Name']||'Unknown';
+    if(!byEmp[n]) byEmp[n]={role:r['Role']||'',status:r['Status']||'PENDING REVIEW',rows:[]};
+    byEmp[n].rows.push(r);
+  });
+  var h='';
+  Object.keys(byEmp).sort().forEach(function(name){
+    var emp=byEmp[name];
+    var s=emp.status.trim().toUpperCase();
+    var sc=s==='APPROVED'?'sb-appr':s==='NEEDS REVISION'?'sb-revs':s==='PUBLISHED'?'sb-pub':'sb-pend';
+    var sLabel=s==='APPROVED'?'&#10003; Approved':s==='NEEDS REVISION'?'Needs Revision':s==='PUBLISHED'?'Published':'&#9203; Pending Review';
+    var gaps=emp.rows.filter(function(r){var g=r['Gaps Identified']||'';return g&&g!=='—'&&g.toLowerCase()!=='no gap';}).length;
+    h+='<div class="emp-card">';
+    h+='<div class="emp-card-hdr">';
+    h+='<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">';
+    h+='<span class="emp-name">'+idpEsc(name)+'</span>';
+    h+='<span class="role-chip">'+idpEsc(emp.role)+'</span>';
+    if(gaps>0) h+='<span class="gap-badge">'+gaps+' gap'+(gaps>1?'s':'')+'</span>';
+    h+='</div>';
+    h+='<div class="emp-actions">';
+    h+='<span class="s-badge '+sc+'">'+sLabel+'</span>';
+    h+='<button class="btn-view-idp" data-name="'+idpEsc(name)+'" onclick="idpViewFull(this.dataset.name)">&#128203; View / Review IDP</button>';
+    if(s!=='PUBLISHED'){
+      h+='<button class="btn-appr" data-name="'+idpEsc(name)+'" onclick="idpQuickApprove(this.dataset.name)">&#10003; Approve</button>';
+      h+='<button class="btn-revs" data-name="'+idpEsc(name)+'" onclick="idpOpenModal(this.dataset.name)">&#8635; Revision</button>';
+    }
+    h+='</div></div>';
+    h+='<div style="padding:10px 18px 14px"><table class="gap-tbl"><thead><tr>';
+    h+='<th>Competency</th><th style="text-align:center">Avg</th><th style="text-align:center">Self</th><th>Gap Area</th><th>Development Action</th></tr></thead><tbody>';
+    emp.rows.forEach(function(r){
+      var avg=parseFloat(r['Avg Score (1-5)']||r['Avg Score']||0);
+      var self=r['Self Score']?parseFloat(r['Self Score']):null;
+      var gap=r['Gaps Identified']||'';
+      var hasGap=gap&&gap!=='—'&&gap.toLowerCase()!=='no gap';
+      var col=avg>=4?'#166534':avg>=3?'#2563a8':avg>=2?'#d97706':'#dc2626';
+      h+='<tr><td><strong>'+idpEsc(r['Competency Name']||'')+'</strong>';
+      if(r['Competency ID']) h+=' <small style="color:#94a3b8">('+idpEsc(r['Competency ID'])+')</small>';
+      h+='</td>';
+      h+='<td style="text-align:center;font-weight:700;color:'+col+'">'+avg.toFixed(1)+'</td>';
+      h+='<td style="text-align:center;color:#64748b">'+(self!==null?self.toFixed(1):'&mdash;')+'</td>';
+      h+='<td style="'+(hasGap?'color:#dc2626;font-weight:600':'color:#94a3b8')+'">'+idpEsc(gap||'&mdash;')+'</td>';
+      h+='<td style="font-size:12px;line-height:1.5">'+idpEsc(r['Development Action']||'&mdash;')+'</td>';
+      h+='</tr>';
+    });
+    h+='</tbody></table></div></div>';
+  });
+  document.getElementById('idp-table').innerHTML=h;
+};
+
+/* ── Sync IDPs from submissions ─────────────────────────────────── */
+function idpSyncNew(){
+  idpToast('Syncing from latest submissions...');
+  fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'data='+encodeURIComponent(JSON.stringify({action:'generateIDPs'}))
+  }).then(function(){setTimeout(function(){idpLoad();},2500);
+  }).catch(function(){setTimeout(function(){idpLoad();},2500);});
+}
+
+/* ── Wrap idpLoad: add workflow banner ──────────────────────────── */
+var _idpLoadOrig=idpLoad;
+idpLoad=function(){
+  if(!document.getElementById('idp-workflow-bar')){
+    var bar=document.createElement('div');
+    bar.id='idp-workflow-bar';bar.className='idp-workflow-bar';
+    bar.innerHTML='<span>&#128203; <strong>Workflow:</strong> Employee submits assessment &rarr; IDP auto-generated &rarr; Sai &amp; Shyam review in full IDP format &rarr; Approve &amp; Publish</span>'
+      +'<button class="btn-sync" onclick="idpSyncNew()">&#128260; Sync New Submissions</button>';
+    var stats=document.getElementById('idp-stats');
+    if(stats&&stats.parentNode) stats.parentNode.insertBefore(bar,stats);
+  }
+  _idpLoadOrig();
+};
+
+/* ── Trigger IDP generation on assessment submit ────────────────── */
+var _handleSubmitOrig=window.handleSubmit;
+window.handleSubmit=async function(){
+  await _handleSubmitOrig.call(this);
+  if(state&&state.submitted&&!GOOGLE_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')){
+    try{fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'data='+encodeURIComponent(JSON.stringify({action:'generateIDP',name:state.rateeName,
+        role:(ROLE_SPECIFIC[state.role]||{label:state.role||''}).label}))});}
+    catch(e){}
+  }
+};
+
+/* ── Update success message ─────────────────────────────────────── */
+var _renderSuccessOrig=window.renderSuccess;
+window.renderSuccess=function(isDemo){
+  _renderSuccessOrig.call(this,isDemo);
+  var p=document.querySelector('.success-screen p');
+  if(p) p.innerHTML=p.innerHTML.replace('is ready for calibration',
+    'has been queued for review. <strong>Sai and Shyam will review the full IDP and approve before it is published.</strong>');
+};
+</script>
+
 </body>
 </html>
