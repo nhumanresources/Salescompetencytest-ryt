@@ -675,6 +675,10 @@ function fld(id, labelText, type, val, onChange, placeholder, isSelect=false) {
       const o = el("option",{value:v},l); if(v===val)o.setAttribute("selected",""); s.appendChild(o);
     });
     wrap.appendChild(s);
+  } else if (Array.isArray(type)) {
+    const s = el("select",{id, onchange:e=>onChange(e.target.value)});
+    type.forEach(([v,l])=>{ const o = el("option",{value:v},l); if(v===val)o.setAttribute("selected",""); s.appendChild(o); });
+    wrap.appendChild(s);
   } else {
     const input = el("input",{id, type, value:val||"", oninput:e=>onChange(e.target.value), onchange:e=>onChange(e.target.value)});
     if(placeholder) input.setAttribute("placeholder",placeholder);
