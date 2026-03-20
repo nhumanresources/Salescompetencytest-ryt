@@ -1315,8 +1315,8 @@ function idpRenderTable(idps) {
     h += '<div><span class="emp-name">' + idpEsc(name) + '</span><span class="role-chip">' + idpEsc(emp.role) + '</span></div>';
     h += '<div class="emp-actions"><span class="s-badge ' + sc + '">' + idpEsc(emp.status) + '</span>';
     if (s !== 'PUBLISHED') {
-      h += '<button class="btn-appr" onclick="idpApprove('' + idpEsc(name) + '')">✅ Approve</button>';
-      h += '<button class="btn-revs" onclick="idpOpenModal('' + idpEsc(name) + '')">🔄 Request Revision</button>';
+      h += '<button class="btn-appr" data-name="' + idpEsc(name) + '" onclick="idpApprove(this.dataset.name)">✅ Approve</button>';
+      h += '<button class="btn-revs" data-name="' + idpEsc(name) + '" onclick="idpOpenModal(this.dataset.name)">🔄 Request Revision</button>';
     }
     h += '</div></div>';
     h += '<table class="gap-tbl"><thead><tr><th>Competency</th><th>Avg</th><th>Self</th><th>Gap</th><th>Development Action</th><th>Reviewer Notes</th></tr></thead><tbody>';
