@@ -628,7 +628,7 @@ function renderAboutYou() {
       // Fields
       (() => {
         const fg1 = el("div",{class:"field-group"});
-        fg1.appendChild(fld("rateeName","Name of person being assessed","text",state.rateeName,v=>{state.rateeName=v;save();},"e.g. Priya Sharma"));
+        fg1.appendChild(fld("rateeName","Name of person being assessed",[["","Select person being assessed..."],["Karthick","Karthick"],["Sajith","Sajith"],["Arun Patnaik","Arun Patnaik"],["Sudheer","Sudheer"],["Kratika","Kratika"],["Vaishnavi","Vaishnavi"],["Nikhil","Nikhil"],["Varsha Sharma","Varsha Sharma"],["Kavitha","Kavitha"],["Vaibhavi","Vaibhavi"],["Namrata","Namrata"],["Ayushi","Ayushi"],["Ashwini","Ashwini"],["Bharat","Bharat"],["Devi Prasad","Devi Prasad"],["Vaisakh","Vaisakh"],["Shyam Mantha","Shyam Mantha"]],state.rateeName,v=>{state.rateeName=v;if(v==="Shyam Mantha"){state.role="hos";}save();}));
         fg1.appendChild(fld("role","Role of person being assessed","select",state.role,v=>{state.role=v;save();},null,true));
         root.querySelector && null; // noop
         return fg1;
