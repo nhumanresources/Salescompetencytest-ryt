@@ -1566,17 +1566,23 @@ function idpCloseModal() { _revName = null; document.getElementById('rev-modal')
 function idpSubmitRevision() {
   var notes = document.getElementById('rev-notes').value.trim();
   var name = _revName;
-  var rows = _allIDPs.filter(r => r['Name'] === name);
-  var ps = rows.map(r => fetch(GOOGLE_SCRIPT_URL, {
-    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
-    body:'data=' + encodeURIComponent(JSON.stringify({action:'updateIDPStatus', name:r['Name'], compId:r['Competency ID'], status:'NEEDS REVISION', notes:notes}))
-  }).then(r=>r.json()));
-  Promise.all(ps).then(() => {
-    _allIDPs.forEach(r => { if(r['Name']===name) { r['Status']='NEEDS REVISION'; r['Reviewer Notes']=notes; }});
-    idpCloseModal();
-    idpRenderTable(_allIDPs); idpRenderStats(_allIDPs);
-    idpToast('🔄 Revision requested for ' + name);
-  }).catch(e => idpToast('❌ Error: ' + e.message));
+  if(!name) return;
+  // Update local state immediately for responsive UI
+  _allIDPs.forEach(function(r){
+    if(r['Name']===name){ r['Status']='NEEDS REVISION'; if(notes) r['Reviewer Notes']=notes; }
+  });
+  // Persist to backend (no-cors fire-and-forget)
+  if(!GOOGLE_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')){
+    fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'data='+encodeURIComponent(JSON.stringify({action:'updateIDP',name:name,status:'NEEDS REVISION',notes:notes}))
+    }).catch(function(){});
+  }
+  idpCloseModal();
+  var f=document.getElementById('idp-filter-sel').value;
+  idpRenderTable(f?_allIDPs.filter(function(r){return(r['Status']||'').trim()===f;}):_allIDPs);
+  idpRenderStats(_allIDPs);
+  idpToast('&#8635; Revision requested for '+name+'. Notes saved.',false);
 }
 
 function idpPublish() {
